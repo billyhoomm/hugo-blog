@@ -1,8 +1,14 @@
 ---
 # 文章标题
 title: "JavaScript代码中必须加分号的所有情况"
+# 文章副标题
+subtitle: ""
 # 文章日期
 date: 2019-09-30T14:00:50+08:00
+# 标签
+tags: ["JavaScript"]
+# 分类
+categories: ["前端"]
 # 草稿标识，true代表正式环境下不显示
 draft: false
 ---
