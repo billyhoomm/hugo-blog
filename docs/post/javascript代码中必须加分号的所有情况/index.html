@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>JavaScript代码中必须加分号的所有情况 - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="前言 之前写JS每句都会加上分号（习惯了很久），但最近好像有点懒，觉得看分号越来越不顺眼，干脆都不写了，所以今天在写async/await函数" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/javascript%E4%BB%A3%E7%A0%81%E4%B8%AD%E5%BF%85%E9%A1%BB%E5%8A%A0%E5%88%86%E5%8F%B7%E7%9A%84%E6%89%80%E6%9C%89%E6%83%85%E5%86%B5/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="JavaScript代码中必须加分号的所有情况" />
+<meta property="og:description" content="前言 之前写JS每句都会加上分号（习惯了很久），但最近好像有点懒，觉得看分号越来越不顺眼，干脆都不写了，所以今天在写async/await函数" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/javascript%E4%BB%A3%E7%A0%81%E4%B8%AD%E5%BF%85%E9%A1%BB%E5%8A%A0%E5%88%86%E5%8F%B7%E7%9A%84%E6%89%80%E6%9C%89%E6%83%85%E5%86%B5/" />
+<meta property="article:published_time" content="2019-09-30T14:00:50+08:00" />
+<meta property="article:modified_time" content="2019-09-30T22:39:32+08:00" />
+<meta itemprop="name" content="JavaScript代码中必须加分号的所有情况">
+<meta itemprop="description" content="前言 之前写JS每句都会加上分号（习惯了很久），但最近好像有点懒，觉得看分号越来越不顺眼，干脆都不写了，所以今天在写async/await函数">
+
+
+<meta itemprop="datePublished" content="2019-09-30T14:00:50&#43;08:00" />
+<meta itemprop="dateModified" content="2019-09-30T22:39:32&#43;08:00" />
+<meta itemprop="wordCount" content="810">
+
+
+
+<meta itemprop="keywords" content="JavaScript," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JavaScript代码中必须加分号的所有情况"/>
+<meta name="twitter:description" content="前言 之前写JS每句都会加上分号（习惯了很久），但最近好像有点懒，觉得看分号越来越不顺眼，干脆都不写了，所以今天在写async/await函数"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">凡有所学</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">凡有所学</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">JavaScript代码中必须加分号的所有情况</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-09-30 </span>
+        <div class="post-category">
+            <a href="/categories/%E5%89%8D%E7%AB%AF/"> 前端 </a>
+            </div>
+          <span class="more-meta"> 约 810 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#括号">括号</a></li>
+<li><a href="#方括号">方括号</a></li>
+<li><a href="#反引号">反引号</a></li>
+<li><a href="#斜杠">斜杠</a></li>
+<li><a href="#加号和减号">加号和减号</a></li>
+</ul></li>
+<li><a href="#总结">总结</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<blockquote>
+<p>前言</p>
+</blockquote>
+
+<p>之前写JS每句都会加上分号（习惯了很久），但最近好像有点懒，觉得看分号越来越不顺眼，干脆都不写了，所以今天在写async/await函数的时候由于上句没加分号就被坑了，于是认真搜了一番在JS中所有会导致上下行解析出问题的 token，目前一共6个：</p>
+
+<p><strong><code>(</code></strong></p>
+
+<p><strong><code>[</code></strong></p>
+
+<p><strong><code>+</code></strong></p>
+
+<p><strong><code>-</code></strong></p>
+
+<p><strong><code>/</code></strong></p>
+
+<p><strong>```</strong></p>
+
+<p>最容易出错的一些例子</p>
+
+<h3 id="括号">括号</h3>
+
+<p>ES7的async使用已经非常普遍了，这种情况如果不注意的话坑到我们的概率很高</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;this has not semicolon&#39;</span><span class="p">)</span>
+
+<span class="p">(</span><span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="kr">await</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">(</span><span class="s1">&#39;ok&#39;</span><span class="p">)</span>
+    <span class="p">})</span>
+<span class="p">})()</span>
+
+<span class="c1">//ERROR：
+</span><span class="c1">//TypeError: console.log(...) is not a function
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="方括号">方括号</h3>
+
+<p>以一个数组作为行首的情况可能不多见，比如：<code>[1,2,3].map()</code>类似于这种也是可能会出现的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;this has not semicolon&#39;</span><span class="p">)</span>
+
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">].</span><span class="nx">map</span><span class="p">(</span><span class="nx">item</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="c1">//ERROR：
+</span><span class="c1">//TypeError: Cannot read property &#39;3&#39; of undefined
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="反引号">反引号</h3>
+
+<p>反引号普遍用在ES6的模板字符串里</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">let</span> <span class="nx">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="nx">str</span> <span class="o">=</span> <span class="s1">&#39;string&#39;</span>
+
+<span class="sb">`test template string </span><span class="si">${</span><span class="nx">a</span><span class="si">}</span><span class="sb">`</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span>
+<span class="c1">//ERROR
+</span><span class="c1">//TypeError: &#34;string&#34; is not a function
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>初一看报这个错很奇怪，稍稍查一下就知道其实是因为ES6的新语法导致的：tagged template，比如这样</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">test</span><span class="sb">`test template string </span><span class="si">${</span><span class="nx">a</span><span class="si">}</span><span class="sb">`</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>这么写，模板字符串并不会直接被插值，而是会被拆成各个部分然后把各个部分按一定形式传给这个 test 的函数，而模板字符串的前面的表达式总会被认为是一个函数，这就导致如果模板字符串的左边不是函数的话，就会报 TypeError 错误</p>
+
+<h3 id="斜杠">斜杠</h3>
+
+<p>这个出现在行首应该只可能在正则表达式中：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;this has not semicolon&#39;</span><span class="p">)</span>
+
+<span class="o">/</span><span class="mi">1</span><span class="p">[</span><span class="mi">34578</span><span class="p">]</span><span class="err">\</span><span class="nx">d</span><span class="p">{</span><span class="mi">9</span><span class="p">}</span><span class="o">/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;wx_1345435465&#39;</span><span class="p">)</span>
+
+<span class="c1">//ERROR：
+</span><span class="c1">//SyntaxError: Invalid or unexpected token
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>这种情况我再vscode中试了下，不加分号编辑器是会直接提示语法错误的，在一般的编辑器中应该也会报错，况且以正则作为行首的情况也基本上见不到</p>
+
+<h3 id="加号和减号">加号和减号</h3>
+
+<p>这两个试了不会报错，但是下面这个情况有可能不是我们的本意？</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;this has not semicolon&#39;</span><span class="p">)</span>
+
+<span class="kd">let</span> <span class="nx">num</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="o">+</span><span class="mi">6</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span>
+
+<span class="c1">//RESULT：
+</span><span class="c1">//this has not semicolon
+</span><span class="c1">//7
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>应该没人会犯这样的错</p>
+
+<h2 id="总结">总结</h2>
+
+<p>最后总结一下就是如果我们在代码中不想用分号，就得在以括号和方括号为行首的情况下，在行首加上一个分号。</p>
+
+<p>而其他情况基本上很难出现，但真出现并且报错了我们也得知道是什么个情况。</p>
+
+<blockquote>
+<p>如有错误，多加指正~~~</p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-09-30
+        <a href="https://github.com/billyhoomm/hugo-blog.git/commit/1a530adfe5448d3469641dc490bc649859e46116" title="更新配置">(1a530ad)</a>
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/javascript/">JavaScript</a>
+          </div>
+      <nav class="post-nav">
+        
+        
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
