@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>跨域 on billyhu&#39;s blog</title>
+    <link>https://billyhu.com/tags/%E8%B7%A8%E5%9F%9F/</link>
+    <description>Recent content in 跨域 on billyhu&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 22 Nov 2016 20:57:50 +0800</lastBuildDate>
+    
+	<atom:link href="https://billyhu.com/tags/%E8%B7%A8%E5%9F%9F/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>跨域方案CORS使用总结</title>
+      <link>https://billyhu.com/post/%E8%B7%A8%E5%9F%9F%E6%96%B9%E6%A1%88cors%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Tue, 22 Nov 2016 20:57:50 +0800</pubDate>
+      
+      <guid>https://billyhu.com/post/%E8%B7%A8%E5%9F%9F%E6%96%B9%E6%A1%88cors%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</guid>
+      <description>前言 最近不管是在公司项目还是自已的个人项目中用到的跨域方案都不再是JSONP了，而是变成了CORS（Cross-origin resource sharing</description>
+    </item>
+    
+  </channel>
+</rss>

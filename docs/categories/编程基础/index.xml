@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>编程基础 on billyhu&#39;s blog</title>
+    <link>https://billyhu.com/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</link>
+    <description>Recent content in 编程基础 on billyhu&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 22 May 2016 22:42:50 +0800</lastBuildDate>
+    
+	<atom:link href="https://billyhu.com/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>正则初探</title>
+      <link>https://billyhu.com/post/%E6%AD%A3%E5%88%99%E5%88%9D%E6%8E%A2/</link>
+      <pubDate>Sun, 22 May 2016 22:42:50 +0800</pubDate>
+      
+      <guid>https://billyhu.com/post/%E6%AD%A3%E5%88%99%E5%88%9D%E6%8E%A2/</guid>
+      <description>正则学习 在编写处理字符串的程序或网页时，经常会有查找符合某些复杂规则的字符串的需要。工作中不管是处理特殊字符串还是批量处理一些东西时使用正则</description>
+    </item>
+    
+  </channel>
+</rss>

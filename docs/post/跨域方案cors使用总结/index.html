@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>跨域方案CORS使用总结 - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="前言 最近不管是在公司项目还是自已的个人项目中用到的跨域方案都不再是JSONP了，而是变成了CORS（Cross-origin resource sharing" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/%E8%B7%A8%E5%9F%9F%E6%96%B9%E6%A1%88cors%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="跨域方案CORS使用总结" />
+<meta property="og:description" content="前言 最近不管是在公司项目还是自已的个人项目中用到的跨域方案都不再是JSONP了，而是变成了CORS（Cross-origin resource sharing" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/%E8%B7%A8%E5%9F%9F%E6%96%B9%E6%A1%88cors%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/" />
+<meta property="article:published_time" content="2016-11-22T20:57:50+08:00" />
+<meta property="article:modified_time" content="2019-10-02T00:29:32+08:00" />
+<meta itemprop="name" content="跨域方案CORS使用总结">
+<meta itemprop="description" content="前言 最近不管是在公司项目还是自已的个人项目中用到的跨域方案都不再是JSONP了，而是变成了CORS（Cross-origin resource sharing">
+
+
+<meta itemprop="datePublished" content="2016-11-22T20:57:50&#43;08:00" />
+<meta itemprop="dateModified" content="2019-10-02T00:29:32&#43;08:00" />
+<meta itemprop="wordCount" content="1443">
+
+
+
+<meta itemprop="keywords" content="cors,跨域," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="跨域方案CORS使用总结"/>
+<meta name="twitter:description" content="前言 最近不管是在公司项目还是自已的个人项目中用到的跨域方案都不再是JSONP了，而是变成了CORS（Cross-origin resource sharing"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">凡有所学</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">凡有所学</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">跨域方案CORS使用总结</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-11-22 </span>
+        <div class="post-category">
+            <a href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/"> 浏览器 </a>
+            </div>
+          <span class="more-meta"> 约 1443 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#一-简介">一、简介</a></li>
+<li><a href="#二-简单请求">二、简单请求</a>
+<ul>
+<li>
+<ul>
+<li><a href="#客户端">客户端：</a></li>
+<li><a href="#服务器">服务器：</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#三-非简单请求">三、非简单请求</a>
+<ul>
+<li>
+<ul>
+<li><a href="#客户端-1">客户端：</a></li>
+<li><a href="#服务器-1">服务器：</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<blockquote>
+<p>前言</p>
+</blockquote>
+
+<p>最近不管是在公司项目还是自已的个人项目中用到的跨域方案都不再是JSONP了，而是变成了CORS（Cross-origin resource sharing），简称为跨域资源共享，是一个W3C标准。</p>
+
+<p>为什么跨域方案从JSONP的盛极一时到现在的CORS大行其道，还是因为CORS做了JSONP做不到的事，我们都知道JSONP只能使用GET形式请求数据，当传输的数据量比较大的时候，就需要使用POST形式才能搞定，于是CORS就出来了。下面是我折腾过程中的一些总结。</p>
+
+<h2 id="一-简介">一、简介</h2>
+
+<p>CORS需要浏览器和服务器同时支持。目前，所有浏览器都支持该功能，IE浏览器不能低于IE10。而使用CORS的方法及其简单，首先在浏览器端不需要有任何处理，只需要写出普通的ajax代码即可，浏览器会根据url参数来确定ajax请求是否跨源，从而自动向服务器发送附加的头信息，所以只需要在服务器端进行处理（发送响应标头）就行。</p>
+
+<h2 id="二-简单请求">二、简单请求</h2>
+
+<p>浏览器将CORS请求分成两类：简单请求（simple request）和非简单请求（not-so-simple request）</p>
+
+<p>只要同时满足以下两大条件，就属于简单请求。</p>
+
+<p>（1) 请求方法是以下三种方法之一：
+- HEAD
+- GET
+- POST</p>
+
+<p>（2）HTTP的头信息不超出以下几种字段：
+- Accept
+- Accept-Language
+- Content-Language
+- Last-Event-ID
+- Content-Type：只限于三个值application/x-www-form-urlencoded、multipart/form-data、text/plain</p>
+
+<p>凡是不同时满足上面两个条件，就属于非简单请求</p>
+
+<h4 id="客户端">客户端：</h4>
+
+<p>对于简单跨域请求，浏览器在进行处理的时候会自动在头信息之中，添加一个Origin字段。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">GET</span> <span class="o">/</span><span class="nx">cors</span> <span class="nx">HTTP</span><span class="o">/</span><span class="mf">1.1</span>
+<span class="nx">Origin</span><span class="o">:</span> <span class="nx">http</span><span class="o">:</span><span class="c1">//blog.billyh.cn
+</span><span class="c1"></span><span class="nx">Host</span><span class="o">:</span> <span class="nx">api</span><span class="p">.</span><span class="nx">alice</span><span class="p">.</span><span class="nx">com</span>
+<span class="nx">Accept</span><span class="o">-</span><span class="nx">Language</span><span class="o">:</span> <span class="nx">en</span><span class="o">-</span><span class="nx">US</span>
+<span class="nx">Connection</span><span class="o">:</span> <span class="nx">keep</span><span class="o">-</span><span class="nx">alive</span>
+<span class="nx">User</span><span class="o">-</span><span class="nx">Agent</span><span class="o">:</span> <span class="nx">Mozilla</span><span class="o">/</span><span class="mf">5.0</span><span class="p">...</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>这个字段说明了本次请求来自哪个源（协议 + 域名 + 端口），服务器根据这个来确定是否同意请求。</p>
+
+<h4 id="服务器">服务器：</h4>
+
+<p>服务器相应的处理代码（以express为例）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">app</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="s2">&#34;*&#34;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">header</span><span class="p">(</span><span class="s1">&#39;Access-Control-Allow-Origin&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">);</span><span class="c1">//-必须-设置来源域名，*表示所有的都可以请求
+</span><span class="c1"></span>  <span class="nx">res</span><span class="p">.</span><span class="nx">header</span><span class="p">(</span><span class="s1">&#39;Access-Control-Allow-Credentials&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">);</span><span class="c1">//-可选-设置是否允许发送cookie
+</span><span class="c1"></span>  <span class="nx">res</span><span class="p">.</span><span class="nx">header</span><span class="p">(</span><span class="s1">&#39;Access-Control-Expose-Headers&#39;</span><span class="p">,</span> <span class="s1">&#39;Foo&#39;</span><span class="p">);</span><span class="c1">//-可选-设置自定义的字段
+</span><span class="c1"></span><span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>上面字段中第一个是必须设置的，否则浏览器将会抛出错误导致跨域失败，其他为可选（剩余这两个字段我还没尝试过，不介绍啦）</p>
+
+<h2 id="三-非简单请求">三、非简单请求</h2>
+
+<p>对于不同时满足上面所说的条件的额请求就是非简单请求，比如请求方法是PUT或DELETE，或者Content-Type字段的类型是application/json的。</p>
+
+<p>对于非简单请求，浏览器会默认自动帮你发一个OPTIONS请求，到服务器端请求服务器确认该请求的合法性，服务器端必须得有相应的响应标头处理该请求，并认真返回200响应，然后浏览器才会再次发出正常的、你需要的请求。</p>
+
+<h4 id="客户端-1">客户端：</h4>
+
+<p>比如我有这样一段ajax请求：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+    <span class="nx">type</span><span class="o">:</span><span class="s2">&#34;PUT&#34;</span><span class="p">,</span>
+    <span class="nx">url</span><span class="o">:</span><span class="s2">&#34;http://www.baidu.com&#34;</span><span class="p">,</span>
+    <span class="nx">dataType</span><span class="o">:</span><span class="s2">&#34;json&#34;</span><span class="p">,</span>
+    <span class="nx">headers</span><span class="o">:</span><span class="p">{</span><span class="nx">token</span><span class="o">:</span><span class="s1">&#39;wuSheng&#39;</span><span class="p">},</span>
+    <span class="nx">success</span><span class="o">:</span><span class="kd">function</span><span class="o">:</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+        <span class="c1">//处理代码
+</span><span class="c1"></span>    <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>上面代码的请求方法为PUT，并且有一个自定义的头信息token，自然为非简单请求了，而这是浏览器的自动处理为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">OPTIONS</span> <span class="o">/</span><span class="nx">cors</span> <span class="nx">HTTP</span><span class="o">/</span><span class="mf">1.1</span>
+<span class="nx">Origin</span><span class="o">:</span> <span class="nx">http</span><span class="o">:</span><span class="c1">//blog.billyh.cn
+</span><span class="c1"></span><span class="nx">Access</span><span class="o">-</span><span class="nx">Control</span><span class="o">-</span><span class="nx">Request</span><span class="o">-</span><span class="nx">Method</span><span class="o">:</span> <span class="nx">PUT</span>
+<span class="nx">Access</span><span class="o">-</span><span class="nx">Control</span><span class="o">-</span><span class="nx">Request</span><span class="o">-</span><span class="nx">Headers</span><span class="o">:</span> <span class="nx">token</span>
+<span class="nx">Host</span><span class="o">:</span> <span class="nx">www</span><span class="p">.</span><span class="nx">baidu</span><span class="p">.</span><span class="nx">com</span>
+<span class="nx">Accept</span><span class="o">-</span><span class="nx">Language</span><span class="o">:</span> <span class="nx">en</span><span class="o">-</span><span class="nx">US</span>
+<span class="nx">Connection</span><span class="o">:</span> <span class="nx">keep</span><span class="o">-</span><span class="nx">alive</span>
+<span class="nx">User</span><span class="o">-</span><span class="nx">Agent</span><span class="o">:</span> <span class="nx">Mozilla</span><span class="o">/</span><span class="mf">5.0</span><span class="p">...</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="服务器-1">服务器：</h4>
+
+<p>同样以express为例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">app</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="s2">&#34;*&#34;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">header</span><span class="p">(</span><span class="s1">&#39;Access-Control-Allow-Origin&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">);</span>
+<span class="c1">//-必须-设置来源域名，*表示所有的都可以请求
+</span><span class="c1"></span>  <span class="nx">res</span><span class="p">.</span><span class="nx">header</span><span class="p">(</span><span class="s2">&#34;Access-Control-Allow-Headers&#34;</span><span class="p">,</span> <span class="s2">&#34;Content-Type,Content-Length, Authorization, Accept,X-Requested-With,token&#34;</span><span class="p">);</span>
+<span class="c1">//-必须-表明服务器支持的所有头信息字段
+</span><span class="c1"></span>  <span class="nx">res</span><span class="p">.</span><span class="nx">header</span><span class="p">(</span><span class="s2">&#34;Access-Control-Allow-Methods&#34;</span><span class="p">,</span><span class="s2">&#34;PUT,POST,GET,DELETE,OPTIONS&#34;</span><span class="p">);</span>
+<span class="c1">//-必须-表明服务器支持的所有跨域请求的方法
+</span><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;OPTIONS&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span><span class="c1">//如果请求方法为OPTIONS则返回200
+</span><span class="c1"></span>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>通过以上的响应处理即可让非简单请求成功跨源</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-10-02
+        <a href="https://github.com/billyhoomm/hugo-blog.git/commit/11ced0d76802191942de1ed02b702b1c1f4f3f8b" title="文章迁移">(11ced0d)</a>
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/cors/">cors</a>
+          <a href="/tags/%E8%B7%A8%E5%9F%9F/">跨域</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3stream%E5%92%8Cbuffer/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">深入理解Stream和Buffer</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/jsplumb%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3/">
+            <span class="next-text nav-default">jsPlumb中文文档</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

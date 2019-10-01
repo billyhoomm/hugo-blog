@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>express-session和signedCookie - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="hi 这是一篇周总结 使用session进行身份认证以及signedCookie session运行在服务器端，当客户端第一次访问服务器时，可以将客" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/express-session%E5%92%8Csignedcookie/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="express-session和signedCookie" />
+<meta property="og:description" content="hi 这是一篇周总结 使用session进行身份认证以及signedCookie session运行在服务器端，当客户端第一次访问服务器时，可以将客" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/express-session%E5%92%8Csignedcookie/" />
+<meta property="article:modified_time" content="2019-10-02T00:29:32+08:00" />
+<meta itemprop="name" content="express-session和signedCookie">
+<meta itemprop="description" content="hi 这是一篇周总结 使用session进行身份认证以及signedCookie session运行在服务器端，当客户端第一次访问服务器时，可以将客">
+
+
+<meta itemprop="dateModified" content="2019-10-02T00:29:32&#43;08:00" />
+<meta itemprop="wordCount" content="2215">
+
+
+
+<meta itemprop="keywords" content="NodeJS,auth,session,cookie,http," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="express-session和signedCookie"/>
+<meta name="twitter:description" content="hi 这是一篇周总结 使用session进行身份认证以及signedCookie session运行在服务器端，当客户端第一次访问服务器时，可以将客"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">凡有所学</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">凡有所学</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">express-session和signedCookie</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        <div class="post-category">
+            <a href="/categories/http/tcp/"> http/tcp </a>
+            </div>
+          <span class="more-meta"> 约 2215 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#使用session进行身份认证以及signedcookie">使用session进行身份认证以及signedCookie</a>
+<ul>
+<li><a href="#session的工作流程">session的工作流程：</a></li>
+<li><a href="#express-session模块的常用参数">express-session模块的常用参数:</a></li>
+<li><a href="#简单的代码示例">简单的代码示例</a></li>
+<li><a href="#关于signedcookie">关于signedCookie</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<blockquote>
+<p>hi 这是一篇周总结</p>
+</blockquote>
+
+<h2 id="使用session进行身份认证以及signedcookie">使用session进行身份认证以及signedCookie</h2>
+
+<blockquote>
+<p>session运行在服务器端，当客户端第一次访问服务器时，可以将客户的登录信息保存。
+当客户访问其他页面时，可以判断客户的登录状态，做出提示，相当于登录拦截。
+session可以和Redis或者数据库等结合做持久化操作，当服务器挂掉时也不会导致某些客户信息（购物车）丢失。</p>
+</blockquote>
+
+<h3 id="session的工作流程">session的工作流程：</h3>
+
+<p>使用 cookie 有一个很大的弊端，cookie 中的所有数据在客户端就可以被修改，数据非常容易被伪造，那么一些重要的数据就不能存放在 cookie 中了，而且如果 cookie 中数据字段太多会影响传输效率。为了解决这些问题，就产生了 session，session 中的数据是保留在服务器端的。</p>
+
+<p>session 的运作通过一个 session_id 来进行。session_id 通常是存放在客户端的 cookie 中，比如在 express 中，默认是 connect.sid 这个字段，当请求到来时，服务端检查 cookie 中保存的 session_id 并通过这个 session_id 与服务器端的 session data 关联起来，进行数据的保存和修改。</p>
+
+<p>这意思就是说，当你浏览一个网页时，服务端随机产生一个 1024 比特长的字符串，然后存在你 cookie 中的 connect.sid字 段中。当你下次访问时，cookie 会带有这个字符串，然后浏览器就知道你是上次访问过的某某某，然后从服务器的存储中取出上次记录在你身上的数据。由于字符串是随机产生的，而且位数足够 多，所以也不担心有人能够伪造。伪造成功的概率比坐在家里编程时被邻居家的狗突然闯入并咬死的几率还低。</p>
+
+<p>session 可以存放在 1）内存、2）cookie本身、3）redis 或 memcached 等缓存中，或者4）数据库中。线上来说，缓存的方案比较常见，存数据库的话，查询效率相比前三者都太低；</p>
+
+<p>express 中操作 session 要用到 express-session (<a href="https://github.com/expressjs/session">https://github.com/expressjs/session</a> ) 这个模块，主要的方法就是session(options)，express-session会 默认使用内存来存 session，比较方便调试，其中 options 中包含可选参数。</p>
+
+<h3 id="express-session模块的常用参数">express-session模块的常用参数:</h3>
+
+<ul>
+<li>secret:一个String类型的字符串，作为服务器端生成session的签名。</li>
+<li>name:返回客户端的key的名称，默认为connect.sid,也可以自己设置。</li>
+<li>resave:(是否允许)当客户端并行发送多个请求时，其中一个请求在另一个请求结束时对session进行修改覆盖并保存。默认为true。但是(后续版本)有可能默认失效，所以最好手动添加。</li>
+<li>saveUninitialized:初始化session时是否保存到存储。默认为true， 但是(后续版本)有可能默认失效，所以最好手动添加。</li>
+<li>cookie:设置返回到前端key的属性，默认值为{ path: ‘/’, httpOnly: true, secure: false, maxAge: null }。</li>
+<li>store: session 的存储方式，默认存放在内存中，也可以使用 redis，mongodb 等。express 生态中都有相应模块的支持。</li>
+<li>genid: 产生一个新的 session_id 时，所使用的函数， 默认使用 uid2 这个 npm 包。</li>
+<li>rolling: 每个请求都重新设置一个 cookie，默认为 false。</li>
+</ul>
+
+<p><strong>express-session的一些方法:</strong></p>
+
+<ul>
+<li><p>Session.destroy():删除session，当检测到客户端关闭时调用。</p></li>
+
+<li><p>Session.reload():当session有修改时，刷新session。</p></li>
+
+<li><p>Session.regenerate()：将已有session初始化。</p></li>
+</ul>
+
+<p>Session.save()：保存session。</p>
+
+<h3 id="简单的代码示例">简单的代码示例</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">//app.js中添加如下代码(已有的不用添加)
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">cookieParser</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cookie-parser&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">session</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express-session&#39;</span><span class="p">);</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">cookieParser</span><span class="p">(</span><span class="s1">&#39;sessiontest&#39;</span><span class="p">));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">session</span><span class="p">({</span>
+    <span class="nx">secret</span><span class="o">:</span> <span class="s1">&#39;sessiontest&#39;</span><span class="p">,</span><span class="c1">//与cookieParser中的一致
+</span><span class="c1"></span>    <span class="nx">resave</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">saveUninitialized</span><span class="o">:</span><span class="kc">true</span>
+<span class="p">}));</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">//修改router/index.js,第一次请求时我们保存一条用户信息。
+</span><span class="c1"></span><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">user</span><span class="o">=</span><span class="p">{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="s2">&#34;Chen-xy&#34;</span><span class="p">,</span>
+        <span class="nx">age</span><span class="o">:</span><span class="s2">&#34;22&#34;</span><span class="p">,</span>
+        <span class="nx">address</span><span class="o">:</span><span class="s2">&#34;bj&#34;</span>
+    <span class="p">}</span>
+  <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="o">=</span><span class="nx">user</span><span class="p">;</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;the test for nodejs session&#39;</span> <span class="p">,</span>
+      <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;sessiontest&#39;</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">//修改router/users.js，判断用户是否登陆。
+</span><span class="c1"></span><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">user</span><span class="o">=</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">name</span><span class="o">=</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;你好&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;，欢迎来到我的家园。&#39;</span><span class="p">);</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;你还没有登录，先登录下再试试！&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="关于signedcookie">关于signedCookie</h3>
+
+<p>上面提到的使用cookie 虽然很方便，但是使用 cookie 有一个很大的弊端，cookie 中的所有数据在客户端就可以被修改，数据非常容易被伪造</p>
+
+<p>其实计算机领域有个名词叫 签名，我们可以用这个来使cookie变得安全和难以破解。</p>
+
+<p>比如我们现在面临一个网站，它用 cookie 来记录登陆的用户凭证。相应的 cookie 是这样：<code>dotcom_user = RoronoaZoro</code>，它说明现在的用户是 RoronoaZoro（索隆）这个用户。如果我在浏览器中装个插件，把它改成<code>dotcom_user = Shanks</code>，服务器一读取，就会误认为我是 Shanks（香克斯）。然后我就可以进行 Shanks才能进行的操作了。如果我们把 cookie 改成 dotcom_user=admin ，说不定可以把这个网站给黑掉。。。</p>
+
+<p>现在我有一些数据，不想存在 session 中，想存在 cookie 中，怎么保证不被篡改呢？那就是签名。</p>
+
+<p>假设我的服务器有个秘密字符串，是 <code>this_is_my_secret_string</code>，我为用户 cookie 的 dotcom_user 字段设置了个值 RoronoaZoro。cookie 本应是<code>{dotcom_user: 'RoronoaZoro'}</code>这样的。</p>
+
+<p>而如果我们签个名，比如把 dotcom_user 的值跟我的 secret_string 做个 sha1</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">sha1</span><span class="p">(</span><span class="s1">&#39;this_is_my_secret_string&#39;</span> <span class="o">+</span><span class="s1">&#39;RoronoaZoro&#39;</span><span class="p">)</span><span class="o">===</span>
+<span class="s1">&#39;4850a42e3bc0d39c978770392cbd8dc2923e3d1d&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>然后把 cookie 变成这样</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="p">{</span>
+  <span class="nx">dotcom_user</span><span class="o">:</span> <span class="s1">&#39;RoronoaZoro&#39;</span><span class="p">,</span>  <span class="s1">&#39;dotcom_user.sig&#39;</span><span class="o">:</span> <span class="s1">&#39;4850a42e3bc0d39c978770392cbd8dc2923e3d1d&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>这样一来，用户就没法伪造信息了。一旦它更改了 cookie 中的信息，则服务器会发现 hash 校验的不一致。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-10-02
+        <a href="https://github.com/billyhoomm/hugo-blog.git/commit/11ced0d76802191942de1ed02b702b1c1f4f3f8b" title="文章迁移">(11ced0d)</a>
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/nodejs/">NodeJS</a>
+          <a href="/tags/auth/">auth</a>
+          <a href="/tags/session/">session</a>
+          <a href="/tags/cookie/">cookie</a>
+          <a href="/tags/http/">http</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/javascript%E4%B8%AD%E7%9A%84this%E7%94%A8%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">javascript中的this用法</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/js%E4%BE%9D%E6%AC%A1%E6%89%A7%E8%A1%8C%E5%A4%9A%E9%A1%B9%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1/">
+            <span class="next-text nav-default">JS依次执行多项异步任务</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>正则初探 - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="正则学习 在编写处理字符串的程序或网页时，经常会有查找符合某些复杂规则的字符串的需要。工作中不管是处理特殊字符串还是批量处理一些东西时使用正则" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/%E6%AD%A3%E5%88%99%E5%88%9D%E6%8E%A2/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="正则初探" />
+<meta property="og:description" content="正则学习 在编写处理字符串的程序或网页时，经常会有查找符合某些复杂规则的字符串的需要。工作中不管是处理特殊字符串还是批量处理一些东西时使用正则" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/%E6%AD%A3%E5%88%99%E5%88%9D%E6%8E%A2/" />
+<meta property="article:published_time" content="2016-05-22T22:42:50+08:00" />
+<meta property="article:modified_time" content="2019-10-02T00:29:32+08:00" />
+<meta itemprop="name" content="正则初探">
+<meta itemprop="description" content="正则学习 在编写处理字符串的程序或网页时，经常会有查找符合某些复杂规则的字符串的需要。工作中不管是处理特殊字符串还是批量处理一些东西时使用正则">
+
+
+<meta itemprop="datePublished" content="2016-05-22T22:42:50&#43;08:00" />
+<meta itemprop="dateModified" content="2019-10-02T00:29:32&#43;08:00" />
+<meta itemprop="wordCount" content="652">
+
+
+
+<meta itemprop="keywords" content="正则表达式," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="正则初探"/>
+<meta name="twitter:description" content="正则学习 在编写处理字符串的程序或网页时，经常会有查找符合某些复杂规则的字符串的需要。工作中不管是处理特殊字符串还是批量处理一些东西时使用正则"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">凡有所学</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">凡有所学</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">正则初探</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-05-22 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/"> 编程基础 </a>
+            </div>
+          <span class="more-meta"> 约 652 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#正则学习">正则学习</a>
+<ul>
+<li><a href="#常用的元字符">常用的元字符</a></li>
+<li><a href="#限定符">限定符</a></li>
+<li><a href="#反义字符">反义字符</a></li>
+<li><a href="#字符转义">字符转义</a></li>
+<li><a href="#分枝条件">分枝条件</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h3 id="正则学习">正则学习</h3>
+
+<p>在编写处理字符串的程序或网页时，经常会有查找符合某些复杂规则的字符串的需要。工作中不管是处理特殊字符串还是批量处理一些东西时使用正则的情况都非常普遍。不熟悉正则很大情况上降低了自己的工作效率。</p>
+
+<h4 id="常用的元字符">常用的元字符</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">代码</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">.</td>
+<td align="center">匹配除换行符以外的任意字符</td>
+</tr>
+
+<tr>
+<td align="center">\w</td>
+<td align="center">匹配字母或数字或下划线或汉字</td>
+</tr>
+
+<tr>
+<td align="center">\s</td>
+<td align="center">匹配任意的空白符</td>
+</tr>
+
+<tr>
+<td align="center">\d</td>
+<td align="center">匹配数字</td>
+</tr>
+
+<tr>
+<td align="center">\s</td>
+<td align="center">匹配任意的空白符</td>
+</tr>
+
+<tr>
+<td align="center">\b</td>
+<td align="center">匹配单词的开始或结束</td>
+</tr>
+
+<tr>
+<td align="center">^</td>
+<td align="center">匹配字符串的开始</td>
+</tr>
+
+<tr>
+<td align="center">$</td>
+<td align="center">匹配字符串的结束</td>
+</tr>
+
+<tr>
+<td align="center">\t</td>
+<td align="center">制表符，Tab</td>
+</tr>
+
+<tr>
+<td align="center">\r</td>
+<td align="center">回车</td>
+</tr>
+
+<tr>
+<td align="center">\n</td>
+<td align="center">换行符</td>
+</tr>
+
+<tr>
+<td align="center">\e</td>
+<td align="center">Escape</td>
+</tr>
+</tbody>
+</table>
+
+<p>eg:一个5到12位的QQ号<code>^\d{5,12}$</code></p>
+
+<h4 id="限定符">限定符</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">代码</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">*</td>
+<td align="center">重复零次或更多次</td>
+</tr>
+
+<tr>
+<td align="center">+</td>
+<td align="center">重复一次或更多次</td>
+</tr>
+
+<tr>
+<td align="center">?</td>
+<td align="center">重复零次或一次</td>
+</tr>
+
+<tr>
+<td align="center">{n}</td>
+<td align="center">重复n次</td>
+</tr>
+
+<tr>
+<td align="center">{n,}</td>
+<td align="center">重复n次或更多次</td>
+</tr>
+
+<tr>
+<td align="center">{n,m}</td>
+<td align="center">重复n到m次</td>
+</tr>
+</tbody>
+</table>
+
+<p>eg:<code>Windows\d+</code>匹配Windows后面跟1个或更多数字</p>
+
+<h4 id="反义字符">反义字符</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">代码</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\W</td>
+<td align="center">匹配任意不是字母，数字，下划线，汉字的字符</td>
+</tr>
+
+<tr>
+<td align="center">\S</td>
+<td align="center">匹配任意非数字的字符</td>
+</tr>
+
+<tr>
+<td align="center">\D</td>
+<td align="center">重复零次或一次</td>
+</tr>
+
+<tr>
+<td align="center">\B</td>
+<td align="center">重复n次</td>
+</tr>
+
+<tr>
+<td align="center">[^x]</td>
+<td align="center">匹配除了x以外的任意字符</td>
+</tr>
+
+<tr>
+<td align="center">[^aeiou]</td>
+<td align="center">匹配除了aeiou这几个字母以外的任意字符</td>
+</tr>
+</tbody>
+</table>
+
+<p>eg:<code>&lt;a[^&gt;]+&gt;</code>匹配用尖括号括起来的以a开头的字符串。</p>
+
+<h4 id="字符转义">字符转义</h4>
+
+<p>如果想查询元字符本身的话，可以使用<code>\</code>对元字符进行转义</p>
+
+<p>eg:<code>deerchao\.net</code>匹配deerchao.net</p>
+
+<h4 id="分枝条件">分枝条件</h4>
+
+<p>分枝条件指有几种规则，如果满足其中任意一种规则都应该当成匹配，条件之间可以用<code>|</code>隔开</p>
+
+<p>eg:<code>0\d{2}-\d{8}|0\d{3}-\d{7}</code>可以匹配两种以连字号分隔的电话号码：一种是三位区号，8位本地号(010-12345678)，一种是4位区号，7位本地号(0376-2233445)</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-10-02
+        <a href="https://github.com/billyhoomm/hugo-blog.git/commit/11ced0d76802191942de1ed02b702b1c1f4f3f8b" title="文章迁移">(11ced0d)</a>
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">正则表达式</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E5%85%B3%E4%BA%8Ejs%E6%A8%A1%E5%9D%97%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%86%99%E6%B3%95%E5%92%8C%E4%BD%9C%E7%94%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">关于JS模块模式的写法和作用</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/iframe%E4%B9%8B%E9%97%B4%E7%9A%84%E8%B7%A8%E5%9F%9F%E5%92%8C%E9%80%9A%E4%BF%A1/">
+            <span class="next-text nav-default">iframe之间的跨域和通信</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

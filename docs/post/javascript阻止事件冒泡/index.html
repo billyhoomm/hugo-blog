@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>JavaScript阻止事件冒泡 - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="取消默认操作 w3c 的方法是 e.preventDefault()，IE 则是使用 e.returnValue = false; 在支持 addEventListener() 的浏览器中，也能通过调用时间对象的 preventDefault() 方法取消时间的默认" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/javascript%E9%98%BB%E6%AD%A2%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="JavaScript阻止事件冒泡" />
+<meta property="og:description" content="取消默认操作 w3c 的方法是 e.preventDefault()，IE 则是使用 e.returnValue = false; 在支持 addEventListener() 的浏览器中，也能通过调用时间对象的 preventDefault() 方法取消时间的默认" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/javascript%E9%98%BB%E6%AD%A2%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" />
+<meta property="article:published_time" content="2016-01-01T09:50:50+08:00" />
+<meta property="article:modified_time" content="2019-10-02T00:29:32+08:00" />
+<meta itemprop="name" content="JavaScript阻止事件冒泡">
+<meta itemprop="description" content="取消默认操作 w3c 的方法是 e.preventDefault()，IE 则是使用 e.returnValue = false; 在支持 addEventListener() 的浏览器中，也能通过调用时间对象的 preventDefault() 方法取消时间的默认">
+
+
+<meta itemprop="datePublished" content="2016-01-01T09:50:50&#43;08:00" />
+<meta itemprop="dateModified" content="2019-10-02T00:29:32&#43;08:00" />
+<meta itemprop="wordCount" content="718">
+
+
+
+<meta itemprop="keywords" content="JavaScript," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JavaScript阻止事件冒泡"/>
+<meta name="twitter:description" content="取消默认操作 w3c 的方法是 e.preventDefault()，IE 则是使用 e.returnValue = false; 在支持 addEventListener() 的浏览器中，也能通过调用时间对象的 preventDefault() 方法取消时间的默认"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">凡有所学</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">凡有所学</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">JavaScript阻止事件冒泡</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-01-01 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> JavaScript </a>
+            </div>
+          <span class="more-meta"> 约 718 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#取消默认操作">取消默认操作</a></li>
+<li><a href="#return-false">return false</a></li>
+<li><a href="#阻止冒泡">阻止冒泡</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="取消默认操作">取消默认操作</h2>
+
+<p>w3c 的方法是 e.preventDefault()，IE 则是使用 e.returnValue = false;</p>
+
+<p>在支持 addEventListener() 的浏览器中，也能通过调用时间对象的 preventDefault() 方法取消时间的默认操作。不过，在 IE9 之前的 IE 中，可以通过设置事件对象的 returnValue 属性为 false 来达到同样的效果。下面的代码假设一个事件处理程序，它使用全部的三种取消技术：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">cancelHandler</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>  
+  <span class="kd">var</span> <span class="nx">event</span> <span class="o">=</span> <span class="nx">event</span> <span class="o">||</span> <span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="p">;</span>  <span class="c1">//用于IE  
+</span><span class="c1"></span>  <span class="k">if</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">)</span> <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>  <span class="c1">//标准技术  
+</span><span class="c1"></span>  <span class="k">if</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">returnValue</span><span class="p">)</span> <span class="nx">event</span><span class="p">.</span><span class="nx">returnValue</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>  <span class="c1">//IE  
+</span><span class="c1"></span>  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>   <span class="c1">//用于处理使用对象属性注册的处理程序  
+</span><span class="c1"></span><span class="p">}</span>  
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>当前的 DOM 事件模型草案定义了 Event 对象属性 defaultPrevented。</p>
+
+<h2 id="return-false">return false</h2>
+
+<p>javascript 的 return false 只会阻止默认行为，而是用 jQuery 的话则既阻止默认行为又防止对象冒泡。</p>
+
+<p>下面这个使用原生 JS，只会阻止默认行为，不会停止冒泡:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&#39;div&#39;</span>  <span class="na">onclick=</span><span class="s">&#39;alert(&#34;div&#34;);&#39;</span><span class="nt">&gt;</span>  
+ 
+　　<span class="nt">&lt;ul</span>  <span class="na">onclick=</span><span class="s">&#39;alert(&#34;ul&#34;);&#39;</span><span class="nt">&gt;</span>  
+	<span class="nt">&lt;li</span> <span class="na">id=</span><span class="s">&#39;ul-a&#39;</span> <span class="na">onclick=</span><span class="s">&#39;alert(&#34;li&#34;);&#39;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&#34;http://caibaojian.com/&#34;</span> <span class="na">id=</span><span class="s">&#34;testB&#34;</span> <span class="nt">&gt;</span>caibaojian.com<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;/li&gt;</span> 
+    <span class="nt">&lt;/ul&gt;</span>  
+ 
+<span class="nt">&lt;/div&gt;</span>  
+ 
+var a = document.getElementById(&#34;testB&#34;);  
+ 
+　　a.onclick = function(){  
+ 
+　　return false;  
+ 
+}</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="阻止冒泡">阻止冒泡</h2>
+
+<p>w3c 的方法是 e.stopPropagation()，IE 则是使用 e.cancelBubble = true</p>
+
+<p>在支持 addEventListener() 的浏览器中，可以调用事件对象的一个 stopPropagation() 方法已阻止事件的继续传播。如果在同一对象上定义了其他处理程序，剩下的处理程序将依旧被调用，但调用 stopPropagation() 方法可以在事件传播期间的任何时间调用，它能工作在捕获阶段、事件目标本身中和冒泡阶段。</p>
+
+<p>IE9 之前的IE不支持 stopPropagation() 方法。相反，IE事件对象有一个 cancleBubble 属性，设置这个属性为 true 能阻止事件进一步传播。（ IE8 及之前版本不支持事件传播的捕获阶段，所以冒泡是唯一待取消的事件传播。）</p>
+
+<p>当前的 DOM 事件规范草案在 Event 对象上定义了另一个方法，命名为stopImmediatePropagation()。类似 stopPropagation(),这个方法组织了任何其他对象的事件传播，但也阻止了在相同对象上注册的任何其他事件处理程序的调用。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&#39;div&#39;</span> <span class="na">onclick=</span><span class="s">&#39;alert(&#34;div&#34;);&#39;</span><span class="nt">&gt;</span>  
+ 
+　　<span class="nt">&lt;ul</span> <span class="na">onclick=</span><span class="s">&#39;alert(&#34;ul&#34;);&#39;</span><span class="nt">&gt;</span>  
+ 
+　　　　<span class="nt">&lt;li</span> <span class="na">onclick=</span><span class="s">&#39;alert(&#34;li&#34;);&#39;</span><span class="nt">&gt;</span>test<span class="nt">&lt;/li&gt;</span>  
+ 
+　　<span class="nt">&lt;/ul&gt;</span>  
+ 
+<span class="nt">&lt;/div&gt;</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">stopHandler</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span>  
+ 
+    <span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="o">?</span><span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="p">.</span><span class="nx">cancelBubble</span><span class="o">=</span><span class="kc">true</span><span class="o">:</span><span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>  
+ 
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-10-02
+        <a href="https://github.com/billyhoomm/hugo-blog.git/commit/11ced0d76802191942de1ed02b702b1c1f4f3f8b" title="文章迁移">(11ced0d)</a>
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/javascript/">JavaScript</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/js%E7%9A%84%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8%E5%88%86%E6%9E%90/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">js的链式调用分析</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E5%85%B3%E4%BA%8Ejavascript%E9%97%AD%E5%8C%85%E7%9A%84%E6%80%BB%E7%BB%93/">
+            <span class="next-text nav-default">关于Javascript闭包的总结</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

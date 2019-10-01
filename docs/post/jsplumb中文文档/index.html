@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>jsPlumb中文文档 - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="前言 以下jsPlumb文档介绍基于jsPlumb2.1.7版本，这是一个开源的流程图或拓扑图绘制工具库，目前网上可用的中文翻译文档并不齐全，" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/jsplumb%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="jsPlumb中文文档" />
+<meta property="og:description" content="前言 以下jsPlumb文档介绍基于jsPlumb2.1.7版本，这是一个开源的流程图或拓扑图绘制工具库，目前网上可用的中文翻译文档并不齐全，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/jsplumb%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3/" />
+<meta property="article:published_time" content="2016-11-13T20:57:50+08:00" />
+<meta property="article:modified_time" content="2019-10-02T00:29:32+08:00" />
+<meta itemprop="name" content="jsPlumb中文文档">
+<meta itemprop="description" content="前言 以下jsPlumb文档介绍基于jsPlumb2.1.7版本，这是一个开源的流程图或拓扑图绘制工具库，目前网上可用的中文翻译文档并不齐全，">
+
+
+<meta itemprop="datePublished" content="2016-11-13T20:57:50&#43;08:00" />
+<meta itemprop="dateModified" content="2019-10-02T00:29:32&#43;08:00" />
+<meta itemprop="wordCount" content="1746">
+
+
+
+<meta itemprop="keywords" content="JavaScript,jsPlumb," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="jsPlumb中文文档"/>
+<meta name="twitter:description" content="前言 以下jsPlumb文档介绍基于jsPlumb2.1.7版本，这是一个开源的流程图或拓扑图绘制工具库，目前网上可用的中文翻译文档并不齐全，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">凡有所学</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">凡有所学</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">jsPlumb中文文档</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-11-13 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> JavaScript </a>
+            </div>
+          <span class="more-meta"> 约 1746 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#jsplumb">jsPlumb</a></li>
+<li><a href="#文件引入和基本设置">文件引入和基本设置</a></li>
+<li><a href="#基本概念">基本概念</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<blockquote>
+<p>前言</p>
+</blockquote>
+
+<p>以下jsPlumb文档介绍基于jsPlumb2.1.7版本，这是一个开源的流程图或拓扑图绘制工具库，目前网上可用的中文翻译文档并不齐全，所以开着翻译工具给强行翻译一下。</p>
+
+<h4 id="jsplumb">jsPlumb</h4>
+
+<ul>
+<li>jsPlumb使用SVG为开发者提供了一个可以形象化连接页面元素的工具</li>
+<li>jsPlumb库不需要外部依赖</li>
+<li>jsPlumb最后一个兼容IE8的版本为1.7.x，此后版本将只支持在现在浏览器中使用，但官方会继续维护1.7.x版本</li>
+</ul>
+
+<h4 id="文件引入和基本设置">文件引入和基本设置</h4>
+
+<p><strong>浏览器兼容性</strong></p>
+
+<ul>
+<li>在IE9中使用jQuery 1.6.x 和1.7.x版本会导致SVG实现的时候hover事件出现问题</li>
+<li>jquery2.0不再支持IE8及以下</li>
+<li>safari5.1在禁止鼠标事件的时候会有一个SVG的BUG</li>
+</ul>
+
+<p><strong>文件引入</strong></p>
+
+<p>老版本的需要引入jquery和jquery-ui两个作为依赖库</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&#34;jsPlumb-2.1.7-min.js&#34;</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&#34;text/javascript&#34;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>初始化</strong></p>
+
+<p>jsplumb在DOM渲染完毕之后才会执行，所以需要为jsplumb的执行代码绑定一个ready事件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">jsPlumb</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">...</span>         
+    <span class="c1">// your jsPlumb related init code goes here
+</span><span class="c1"></span>    <span class="p">...</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>jsplumb默认是注册在浏览器窗口的，将整个页面提供给我们作为一个实例，但我们也可以使用getInstance方法建立页面中一个独立的实例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">firstInstance</span> <span class="o">=</span> <span class="nx">jsPlumb</span><span class="p">.</span><span class="nx">getInstance</span><span class="p">();</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>建立实例之后我们可以为其设置一些默认值：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">firstInstance</span><span class="p">.</span><span class="nx">importDefaults</span><span class="p">({</span>
+  <span class="nx">Connector</span> <span class="o">:</span> <span class="p">[</span> <span class="s2">&#34;Bezier&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">curviness</span><span class="o">:</span> <span class="mi">150</span> <span class="p">}</span> <span class="p">],</span><span class="c1">//连接器类型
+</span><span class="c1"></span>  <span class="nx">Anchors</span> <span class="o">:</span> <span class="p">[</span> <span class="s2">&#34;TopCenter&#34;</span><span class="p">,</span> <span class="s2">&#34;BottomCenter&#34;</span> <span class="p">]</span><span class="c1">//锚点位置
+</span><span class="c1"></span><span class="p">});</span>
+ 
+<span class="nx">firstInstance</span><span class="p">.</span><span class="nx">connect</span><span class="p">({</span>
+  <span class="nx">source</span><span class="o">:</span><span class="s2">&#34;element1&#34;</span><span class="p">,</span><span class="c1">//源端点 
+</span><span class="c1"></span>  <span class="nx">target</span><span class="o">:</span><span class="s2">&#34;element2&#34;</span><span class="p">,</span><span class="c1">//目标端点
+</span><span class="c1"></span>  <span class="nx">scope</span><span class="o">:</span><span class="s2">&#34;someScope&#34;</span> <span class="c1">//可拖拽范围
+</span><span class="c1"></span><span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>其实在使用getInstance的时候还可以随意设置默认的参数：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">secondInstance</span> <span class="o">=</span> <span class="nx">jsPlumb</span><span class="p">.</span><span class="nx">getInstance</span><span class="p">({</span>
+  <span class="nx">PaintStyle</span><span class="o">:</span><span class="p">{</span> <span class="c1">//端点参数
+</span><span class="c1"></span>    <span class="nx">lineWidth</span><span class="o">:</span><span class="mi">6</span><span class="p">,</span> 
+    <span class="nx">strokeStyle</span><span class="o">:</span><span class="s2">&#34;#567567&#34;</span><span class="p">,</span> 
+    <span class="nx">outlineColor</span><span class="o">:</span><span class="s2">&#34;black&#34;</span><span class="p">,</span> 
+    <span class="nx">outlineWidth</span><span class="o">:</span><span class="mi">1</span> 
+  <span class="p">},</span>
+  <span class="nx">Connector</span><span class="o">:</span><span class="p">[</span> <span class="s2">&#34;Bezier&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">curviness</span><span class="o">:</span> <span class="mi">30</span> <span class="p">}</span> <span class="p">],</span>
+  <span class="nx">Endpoint</span><span class="o">:</span><span class="p">[</span> <span class="s2">&#34;Dot&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">radius</span><span class="o">:</span><span class="mi">5</span> <span class="p">}</span> <span class="p">],</span>
+  <span class="nx">EndpointStyle</span> <span class="o">:</span> <span class="p">{</span> <span class="nx">fillStyle</span><span class="o">:</span> <span class="s2">&#34;#567567&#34;</span>  <span class="p">},</span><span class="c1">//端点参数
+</span><span class="c1"></span>  <span class="nx">Anchor</span> <span class="o">:</span> <span class="p">[</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">]</span><span class="c1">//锚点
+</span><span class="c1"></span><span class="p">});</span>
+ 
+<span class="nx">secondInstance</span><span class="p">.</span><span class="nx">connect</span><span class="p">({</span> 
+  <span class="nx">source</span><span class="o">:</span><span class="s2">&#34;element4&#34;</span><span class="p">,</span> 
+  <span class="nx">target</span><span class="o">:</span><span class="s2">&#34;element3&#34;</span><span class="p">,</span> 
+  <span class="nx">scope</span><span class="o">:</span><span class="s2">&#34;someScope&#34;</span>   
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>元素ID</strong></p>
+
+<p>jsplumb需要使用元素的ID属性来实现交互，如果用户没有设置ID，它将自动帮用户设置一个ID，所以还是建议用户自己为元素设置一个合适的ID。</p>
+
+<p>因为jsplumb的这个特性，所以你必须告知jsplumb某一元素的ID是否被改变：</p>
+
+<ul>
+<li>jsPlumb.setId(el, newId) 使用这个方法设置ID会让jsplumb自动跟随ID的变化</li>
+<li>jsPlumb.setIdChanged(oldId, newId) 如果元素的ID已经被改变，可以使用此方法来更新ID</li>
+</ul>
+
+<h4 id="基本概念">基本概念</h4>
+
+<p><strong>锚(Anchor)</strong>：一个位置，放置端点的地方，相对于一个元素的来源，您不需要自己硬编码来创建它，jsPlumb提供给您各种功能，您只需要按照您的需要创建它就可以了。它没有可视化的显示，只是一个逻辑位置，可以使用锚的id来引用它，jsPlumb支持这样做，并且您可以使用坐标来表示[x,y,x方向,y方向]</p>
+
+<p><strong>端点(Endpoint )</strong>：链接的一端的可视化表示，您可以创建并可以链接他们；您可以让他们支持拖拽，或者您可以直接使用jsPlumb.connect()在创建链接时直接创建它们。</p>
+
+<p><strong>连接器(Connector)</strong>：链接两个元素的线，页面的可视化表示，jsPlumb有三种默认类型:Bezier曲线，直线，和流程图链接器，您不用去处理连接器，当您需要使用它们时，您只需要定义它们即可。</p>
+
+<p><strong>覆盖物(Overlay)</strong>：一个UI组件，是用来是用来装饰连接器，例如标签、箭头等。</p>
+
+<p><strong>1. 锚(Anchors)</strong></p>
+
+<p>锚的概念是指：定义一个链接线能够链接的点，jsPlumb有9个默认的锚点位置，您可以使用它们去链接元素，包括每个方向并排两个位置加中间位置，这些位置在jsplumb底层代码中都是以阵列语法表示的，[X,Y,DX,DY],其中X,Y是在区间[0,1]指定锚的位置，DX和DY是在区间[-1,1]指定曲线的事件锚的方向坐标，例如[0，0.5，-1，0]定义了一个“LeftCenter”连接器的曲线，从锚点单向向左的曲线.同样，[0.5，0，0，-1]，定义一个“CenterTop”锚连接器所产生的向上的曲线。</p>
+
+<p><strong>2. 动态锚(Dynamic Anchors)</strong></p>
+
+<p>这些都是可以在若干地点之一定位的锚点，当你每次移动一个元素时，会自动选择一个最合适的位置，没有特殊的语法来创建一个DynamicAnchor，你只需要提供一个独立的锚位置，例如数组，</p>
+
+<p>jsPlumb提供一个动态的锚，定名为“AutoDefault”默认位置有：TopCenter，RightMiddle，BottomCenter和LeftMiddle</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-10-02
+        <a href="https://github.com/billyhoomm/hugo-blog.git/commit/11ced0d76802191942de1ed02b702b1c1f4f3f8b" title="文章迁移">(11ced0d)</a>
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/javascript/">JavaScript</a>
+          <a href="/tags/jsplumb/">jsPlumb</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E8%B7%A8%E5%9F%9F%E6%96%B9%E6%A1%88cors%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">跨域方案CORS使用总结</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E5%85%B3%E4%BA%8Ejs%E6%A8%A1%E5%9D%97%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%86%99%E6%B3%95%E5%92%8C%E4%BD%9C%E7%94%A8/">
+            <span class="next-text nav-default">关于JS模块模式的写法和作用</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

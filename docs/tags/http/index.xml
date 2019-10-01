@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>http on billyhu&#39;s blog</title>
+    <link>https://billyhu.com/tags/http/</link>
+    <description>Recent content in http on billyhu&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 26 Apr 2018 10:26:50 +0800</lastBuildDate>
+    
+	<atom:link href="https://billyhu.com/tags/http/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>浏览器的Http请求重发机制</title>
+      <link>https://billyhu.com/post/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84http%E8%AF%B7%E6%B1%82%E9%87%8D%E5%8F%91%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Thu, 26 Apr 2018 10:26:50 +0800</pubDate>
+      
+      <guid>https://billyhu.com/post/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84http%E8%AF%B7%E6%B1%82%E9%87%8D%E5%8F%91%E6%9C%BA%E5%88%B6/</guid>
+      <description>前言：近期由于业务需要写了一个逻辑，主要是给几万个用户群发消息，前端发送请求后，后台会加一个时间间隔分批发送，全部发送完毕后再回包。结果就出</description>
+    </item>
+    
+    <item>
+      <title>express-session和signedCookie</title>
+      <link>https://billyhu.com/post/express-session%E5%92%8Csignedcookie/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://billyhu.com/post/express-session%E5%92%8Csignedcookie/</guid>
+      <description>hi 这是一篇周总结 使用session进行身份认证以及signedCookie session运行在服务器端，当客户端第一次访问服务器时，可以将客</description>
+    </item>
+    
+  </channel>
+</rss>

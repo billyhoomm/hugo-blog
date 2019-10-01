@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nginx on billyhu&#39;s blog</title>
+    <link>https://billyhu.com/tags/nginx/</link>
+    <description>Recent content in Nginx on billyhu&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    
+	<atom:link href="https://billyhu.com/tags/nginx/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Nginx反向代理Nodejs详细配置</title>
+      <link>https://billyhu.com/post/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86nodejs%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://billyhu.com/post/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86nodejs%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/</guid>
+      <description>前言 空余时间学习使用vue.js+webpack制作了一个简单的nodejs网站，web服务器使用express构建，而个人的云服务器是部署</description>
+    </item>
+    
+  </channel>
+</rss>
