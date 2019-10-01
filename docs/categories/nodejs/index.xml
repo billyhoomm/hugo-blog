@@ -32,7 +32,7 @@
     <item>
       <title>NodeJS中的线程、异步和事件循环</title>
       <link>https://billyhu.com/post/nodejs%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%BC%82%E6%AD%A5%E5%92%8C%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 30 Aug 2017 15:41:50 +0800</pubDate>
       
       <guid>https://billyhu.com/post/nodejs%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%BC%82%E6%AD%A5%E5%92%8C%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/</guid>
       <description>单线程OR多线程 一些理解 我们写出来的js代码，是在单线程的环境中执行，但nodejs本身不是单线程的。如果我们在代码中执行了一个promis</description>

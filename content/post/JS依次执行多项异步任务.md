@@ -4,7 +4,7 @@ title: "JS依次执行多项异步任务"
 # 文章副标题
 subtitle: ""
 # 文章日期
-date: 2017-5-19T23:23:50+08:00
+date: 2017-05-19T23:23:50+08:00
 # 标签
 tags: ["JavaScript", 'Promise']
 # 分类

@@ -23,7 +23,7 @@
     <item>
       <title>express-session和signedCookie</title>
       <link>https://billyhu.com/post/express-session%E5%92%8Csignedcookie/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 12 Jun 2017 16:41:50 +0800</pubDate>
       
       <guid>https://billyhu.com/post/express-session%E5%92%8Csignedcookie/</guid>
       <description>hi 这是一篇周总结 使用session进行身份认证以及signedCookie session运行在服务器端，当客户端第一次访问服务器时，可以将客</description>

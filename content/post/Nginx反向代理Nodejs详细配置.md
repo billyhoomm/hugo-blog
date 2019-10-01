@@ -4,7 +4,7 @@ title: "Nginx反向代理Nodejs详细配置"
 # 文章副标题
 subtitle: ""
 # 文章日期
-date: 2017-2-18T21:57:50+08:00
+date: 2017-02-18T21:57:50+08:00
 # 标签
 tags: ["NodeJS", 'Nginx']
 # 分类

@@ -4,7 +4,7 @@ title: "express-session和signedCookie"
 # 文章副标题
 subtitle: ""
 # 文章日期
-date: 2017-6-12T16:41:50+08:00
+date: 2017-06-12T16:41:50+08:00
 # 标签
 tags: ["NodeJS", 'auth', 'session', 'cookie', 'http']
 # 分类
