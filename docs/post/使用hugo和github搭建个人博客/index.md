@@ -1,11 +1,3 @@
----
-title: "使用hugo和github pages搭建个人博客"
-subtitle: ""
-date: 2019-10-02T22:02:01+08:00
-tags: ["hugo", "github pages"]
-categories: ["博客"]
-draft: false
----
 
 ## 关于hugo
 

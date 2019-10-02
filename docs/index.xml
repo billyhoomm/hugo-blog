@@ -6,10 +6,19 @@
     <description>Recent content on billyhu&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 30 Sep 2019 14:00:50 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 02 Oct 2019 22:02:01 +0800</lastBuildDate>
     
 	<atom:link href="https://billyhu.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>使用hugo和github pages搭建个人博客</title>
+      <link>https://billyhu.com/post/%E4%BD%BF%E7%94%A8hugo%E5%92%8Cgithub%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
+      <pubDate>Wed, 02 Oct 2019 22:02:01 +0800</pubDate>
+      
+      <guid>https://billyhu.com/post/%E4%BD%BF%E7%94%A8hugo%E5%92%8Cgithub%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</guid>
+      <description>关于hugo Hugo是一个用Go语言编写的静态网站生成器，它使用起来非常简单，相对于Jekyll复杂的安装设置来说，Hugo仅需要一个二进制</description>
+    </item>
     
     <item>
       <title></title>
