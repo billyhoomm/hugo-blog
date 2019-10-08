@@ -124,6 +124,9 @@ git push origin master
 有条件的可以为根域名添加4个A记录到上面四个IP，但是腾讯云免费情况下只支持两个IP的负载均衡，于是加一个算了...
 
 接下来查看自己的域名解析是否生效了，linux或者macos可以输入以下命令：
+```
+dig +noall +answer billyhu.com
+```
 
 ![](https://cdn.billyhu.com/blogUploads/dns_check.png)
 

@@ -50,7 +50,7 @@
 
 <meta itemprop="datePublished" content="2019-10-02T22:02:01&#43;08:00" />
 <meta itemprop="dateModified" content="2019-10-02T22:02:01&#43;08:00" />
-<meta itemprop="wordCount" content="1439">
+<meta itemprop="wordCount" content="1444">
 
 
 
@@ -131,7 +131,7 @@
         <div class="post-category">
             <a href="/categories/%E5%8D%9A%E5%AE%A2/"> 博客 </a>
             </div>
-          <span class="more-meta"> 约 1439 字 </span>
+          <span class="more-meta"> 约 1444 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
       </div>
@@ -308,7 +308,14 @@ git push origin master</pre></td></tr></table>
 <p>有条件的可以为根域名添加4个A记录到上面四个IP，但是腾讯云免费情况下只支持两个IP的负载均衡，于是加一个算了&hellip;</p>
 
 <p>接下来查看自己的域名解析是否生效了，linux或者macos可以输入以下命令：</p>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">dig +noall +answer billyhu.com</pre></td></tr></table>
+</div>
+</div>
 <p><img src="https://cdn.billyhu.com/blogUploads/dns_check.png" alt="" /></p>
 
 <p>查看到结果即为解析成功</p>
