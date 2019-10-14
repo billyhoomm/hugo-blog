@@ -13,10 +13,10 @@
     
     <item>
       <title>正则初探</title>
-      <link>https://billyhu.com/post/%E6%AD%A3%E5%88%99%E5%88%9D%E6%8E%A2/</link>
+      <link>https://billyhu.com/post/learning-regular-expression/</link>
       <pubDate>Sun, 22 May 2016 22:42:50 +0800</pubDate>
       
-      <guid>https://billyhu.com/post/%E6%AD%A3%E5%88%99%E5%88%9D%E6%8E%A2/</guid>
+      <guid>https://billyhu.com/post/learning-regular-expression/</guid>
       <description>正则学习 在编写处理字符串的程序或网页时，经常会有查找符合某些复杂规则的字符串的需要。工作中不管是处理特殊字符串还是批量处理一些东西时使用正则</description>
     </item>
     

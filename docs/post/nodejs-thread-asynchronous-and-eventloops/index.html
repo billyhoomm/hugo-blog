@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>NodeJS中的线程、异步和事件循环 - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="单线程OR多线程 一些理解 我们写出来的js代码，是在单线程的环境中执行，但nodejs本身不是单线程的。如果我们在代码中执行了一个promis" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/nodejs-thread-asynchronous-and-eventloops/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="NodeJS中的线程、异步和事件循环" />
+<meta property="og:description" content="单线程OR多线程 一些理解 我们写出来的js代码，是在单线程的环境中执行，但nodejs本身不是单线程的。如果我们在代码中执行了一个promis" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/nodejs-thread-asynchronous-and-eventloops/" />
+<meta property="article:published_time" content="2017-08-30T15:41:50+08:00" />
+<meta property="article:modified_time" content="2017-08-30T15:41:50+08:00" />
+<meta itemprop="name" content="NodeJS中的线程、异步和事件循环">
+<meta itemprop="description" content="单线程OR多线程 一些理解 我们写出来的js代码，是在单线程的环境中执行，但nodejs本身不是单线程的。如果我们在代码中执行了一个promis">
+
+
+<meta itemprop="datePublished" content="2017-08-30T15:41:50&#43;08:00" />
+<meta itemprop="dateModified" content="2017-08-30T15:41:50&#43;08:00" />
+<meta itemprop="wordCount" content="1415">
+
+
+
+<meta itemprop="keywords" content="NodeJS," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="NodeJS中的线程、异步和事件循环"/>
+<meta name="twitter:description" content="单线程OR多线程 一些理解 我们写出来的js代码，是在单线程的环境中执行，但nodejs本身不是单线程的。如果我们在代码中执行了一个promis"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">刻舟求剑</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">刻舟求剑</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">NodeJS中的线程、异步和事件循环</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-08-30 </span>
+        <div class="post-category">
+            <a href="/categories/nodejs/"> NodeJS </a>
+            </div>
+          <span class="more-meta"> 约 1415 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#单线程or多线程">单线程OR多线程</a></li>
+<li><a href="#事件驱动和异步i-o">事件驱动和异步I/O</a></li>
+<li><a href="#最后">最后：</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h3 id="单线程or多线程">单线程OR多线程</h3>
+
+<p><strong>一些理解</strong></p>
+
+<ul>
+<li><p>我们写出来的js代码，是在单线程的环境中执行，但nodejs本身不是单线程的。如果我们在代码中执行了一个promise，它们可能是通过底层的c++模块在另外的线程中完成？&hellip; 但对于我们自己的js代码来说，它们处于单线程中。因为异步函数执行完将结果通过回调函数传给我们的时候，我们的代码一次只能处理一个。</p></li>
+
+<li><p>node擅长处理高并发，是因为拥有异步IO，node在处理IO时主线程会创建N个子线程以提高速度，虽然开启了多个线程，但是所有线程都是基于主线程开启的只能跑在一个进程当中并不能充分利用cpu资源</p></li>
+</ul>
+
+<p><strong>单线程的问题</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">start</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span><span class="c1">//获取当前时间戳
+</span><span class="c1"></span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">start</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">10000000000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span><span class="c1">//执行长循环
+</span><span class="c1"></span>    <span class="p">}</span>
+<span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">start</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>上面执行后的输出结果为1000、13322，足足等了10秒钟，console.log才被执行，这个for循环是一个非常吃CPU的计算过程，而Node的主线程却只能调用一个CPU来计算它（线程是cpu调度的一个基本单位，一个cpu同时只能执行一个线程的任务），但是如果我们在写JS代码时能像Node底层开启另外一个线程处理异步的方式那样，手动创建子线程，这个问题就解决了。</p>
+
+<h3 id="事件驱动和异步i-o">事件驱动和异步I/O</h3>
+
+<p>所以nodejs只有一个主线程(single thread)运行，通过一个事件循环(event-loop)来循环取出消息队列(event-queue)中的消息进行处理,处理过程基本上就是去调用该消息对应的回调函数。消息队列就是当一个事件状态发生变化时，就将一个消息压入队列中。</p>
+
+<p>nodejs的时间驱动模型一般要注意下面几个点：</p>
+
+<p>因为是单线程的，所以当顺序执行js文件中的代码的时候，事件循环是被暂停的。</p>
+
+<p>当js文件执行完以后，事件循环开始运行，并从消息队列中取出消息，开始执行回调函数</p>
+
+<p>因为是单线程的，所以当回调函数被执行的时候，事件循环是被暂停的</p>
+
+<p>当涉及到I/O操作的时候，nodejs会开一个独立的线程来进行异步I/O操作，操作结束以后将消息压入消息队列。</p>
+
+<p>如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&#34;fs&#34;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">debug</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">)(</span><span class="s1">&#39;example1&#39;</span><span class="p">);</span>
+
+<span class="nx">debug</span><span class="p">(</span><span class="s2">&#34;begin&#34;</span><span class="p">);</span>
+
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;package.json&#39;</span><span class="p">,</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="nx">data</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>  
+        <span class="nx">debug</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="nx">debug</span><span class="p">(</span><span class="s2">&#34;get file content&#34;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">debug</span><span class="p">(</span><span class="s2">&#34;timeout2&#34;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">debug</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">);</span> <span class="c1">// 运行到这里之前，事件循环是暂停的
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>上述代码执行顺序：
+1. 同步执行debug(&ldquo;begin&rdquo;)</p>
+
+<ol>
+<li><p>异步调用fs.readFile()，此时会开一个新的线程去进行异步I/O操作</p></li>
+
+<li><p>异步调用setTimeout()，马上将超时信息压入到消息队列中</p></li>
+
+<li><p>同步调用debug(&ldquo;end&rdquo;)</p></li>
+
+<li><p>开启事件循环，弹出消息队列中的信息(目前是超时信息)</p></li>
+
+<li><p>然后执行信息对应的回调函数(事件循环又被暂停)</p></li>
+
+<li><p>回调函数执行结束后，开始事件循环(目前消息队列中没有任何东西，文件还没读完)</p></li>
+
+<li><p>异步I/O读取文件完毕，将消息压入消息队列(消息中含有文件内容或者是出错信息)</p></li>
+
+<li><p>事件循环取得消息，执行回调</p></li>
+
+<li><p>程序退出。</p></li>
+</ol>
+
+<p>盗来的图~~~</p>
+
+<p><strong>事件循环的工作过程</strong></p>
+
+<p><img src="http://cdn.billyhu.com/blogUploads/1522406782000.png" alt="" /></p>
+
+<p><strong>底层多个线程处理事件的原理</strong></p>
+
+<p><img src="http://cdn.billyhu.com/blogUploads/1522406826000.png" alt="" /></p>
+
+<h3 id="最后">最后：</h3>
+
+<p><strong>使用单线程的Node写代码时应该注意的东西</strong></p>
+
+<ul>
+<li>上面的测试说明了，在主线程做一些CPU计算量很大的任务可能会导致主线程卡住或者长时间停顿从而让整个程序的执行延时甚至卡死，影响程序性能，所以我们要非常小心的处理大量的循环，字符串拼接和浮点运算这种cpu密集型任务，在需要的时候应该利用上面提到的cluster和多线程模型把任务丢给子线程或子进程去完成，保持程序主线程的畅通。</li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2017-08-30
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/nodejs/">NodeJS</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/learning-stream-and-buffer/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">深入理解Stream和Buffer</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/express-session-and-signed-cookie/">
+            <span class="next-text nav-default">express-session和signedCookie</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>JS的函数定义方式以及对声明的提前 - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="前言 由于javascript中的函数定义方式比较特殊，并且每种的特点都不相同，所以本文介绍一下JS几种函数定义方式和各自的优缺点，并且对JS" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/js-statement-in-advance/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="JS的函数定义方式以及对声明的提前" />
+<meta property="og:description" content="前言 由于javascript中的函数定义方式比较特殊，并且每种的特点都不相同，所以本文介绍一下JS几种函数定义方式和各自的优缺点，并且对JS" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/js-statement-in-advance/" />
+<meta property="article:published_time" content="2016-03-08T23:20:32+08:00" />
+<meta property="article:modified_time" content="2016-03-08T23:20:32+08:00" />
+<meta itemprop="name" content="JS的函数定义方式以及对声明的提前">
+<meta itemprop="description" content="前言 由于javascript中的函数定义方式比较特殊，并且每种的特点都不相同，所以本文介绍一下JS几种函数定义方式和各自的优缺点，并且对JS">
+
+
+<meta itemprop="datePublished" content="2016-03-08T23:20:32&#43;08:00" />
+<meta itemprop="dateModified" content="2016-03-08T23:20:32&#43;08:00" />
+<meta itemprop="wordCount" content="1465">
+
+
+
+<meta itemprop="keywords" content="JavaScript," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JS的函数定义方式以及对声明的提前"/>
+<meta name="twitter:description" content="前言 由于javascript中的函数定义方式比较特殊，并且每种的特点都不相同，所以本文介绍一下JS几种函数定义方式和各自的优缺点，并且对JS"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">刻舟求剑</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">刻舟求剑</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">JS的函数定义方式以及对声明的提前</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-03-08 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> JavaScript </a>
+            </div>
+          <span class="more-meta"> 约 1465 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#函数定义方式">函数定义方式</a>
+<ul>
+<li><a href="#函数生命式">函数生命式</a></li>
+<li><a href="#function构造函数方式">function构造函数方式</a></li>
+<li><a href="#函数直接量">函数直接量</a></li>
+<li><a href="#区别">区别</a></li>
+</ul></li>
+<li><a href="#函数声明和变量声明的提前">函数声明和变量声明的提前</a>
+<ul>
+<li><a href="#变量声明提前">变量声明提前：</a></li>
+<li><a href="#函数声明提前">函数声明提前：</a></li>
+</ul></li>
+<li><a href="#总结">总结</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<blockquote>
+<p>前言</p>
+</blockquote>
+
+<p>由于javascript中的函数定义方式比较特殊，并且每种的特点都不相同，所以本文介绍一下JS几种函数定义方式和各自的优缺点，并且对JS中的函数声明和变量声明的hoist（提前）进行简略说明。</p>
+
+<h3 id="函数定义方式">函数定义方式</h3>
+
+<h4 id="函数生命式">函数生命式</h4>
+
+<p>这是js中比较常用的方式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">funcname</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+  <span class="c1">//处理代码
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>当该函数被调用，函数体才会被得到执行。</p>
+
+<h4 id="function构造函数方式">function构造函数方式</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">funcname</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Function</span> <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;alert(x+y)&#39;</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>该定义方式中前面两个是参数，参数可以是任意多个字符串；第三个是函数体，可以包含任何 JavaScript 语句，语句之间用分号隔开。如果没有参数，传一个函数体即可。由于传递给 Function () 函数中，没有一个字符串是用来声明函数名的，所以它是一个匿名函数。</p>
+
+<h4 id="函数直接量">函数直接量</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">funcname</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+  <span class="c1">//处理代码
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="区别">区别</h4>
+
+<p>三种方式的区别，可以从作用域、效率以及加载顺序来区分。首先，从作用域上来说，函数声明式和函数直接量使用的是局部变量，而 Function()构造函数却是全局变量:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="s1">&#39;global&#39;</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">a</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="s1">&#39;local a&#39;</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nx">y</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">a</span><span class="p">());</span><span class="c1">//显示&#39;local a&#39;
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="s1">&#39;local b&#39;</span><span class="p">;</span>
+<span class="k">return</span> <span class="nx">y</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">b</span><span class="p">())</span> <span class="c1">//显示&#39;local b&#39;
+</span><span class="c1"></span><span class="kd">function</span> <span class="nx">c</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="s1">&#39;local c&#39;</span><span class="p">;</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nb">Function</span><span class="p">(</span><span class="s1">&#39;return y&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">c</span><span class="p">()());</span><span class="c1">//显示&#39;global&#39;，因为Function()返回的是全局变量y，而不是函数体内的局部变量。
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>再看效率，Function()构造函数的效率要低于其他两种方式，尤其是在循环体中，因为构造函数每执行一次都要重新编译，并且生成新的函数对象。</p>
+
+<p>最后是加载顺序，function 方式(即函数声明式)是在 JavaScript 编译的时候就加载到作用域中,而其他两种方式则是在代码执行的时候加载，如果在定义之前调用它，则会返回 <code>undefined</code>。</p>
+
+<h3 id="函数声明和变量声明的提前">函数声明和变量声明的提前</h3>
+
+<p>从上面对三种定义方式的比较来看，只有函数声明方式定义的函数会在JS编译的时候就加载到作用域中，由此想到了JS中对声明的提前</p>
+
+<h4 id="变量声明提前">变量声明提前：</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span><span class="c1">//undefined
+</span><span class="c1"></span>  <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="s2">&#34;Now it&#39;s defined!&#34;</span><span class="p">;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span><span class="c1">//&#34;Now it&#39;s defined!&#34;
+</span><span class="c1"></span><span class="p">})();</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>在未对a进行定义和声明的时候输出a却提示undefined但没有报错，这其实是 JavaScript 解析器搞的鬼，解析器将当前作用域内声明的所有变量和函数都会放到作用域的开始处，但是，只有变量的声明被提前到作用域的开始处了，而赋值操作被保留在原处。</p>
+
+<p>由于 JavaScript 具有这样的“怪癖”，所以你会看到很多编码指南建议大家将变量声明放在作用域的最上方，这样就能时刻提醒自己注意了。</p>
+
+<h4 id="函数声明提前">函数声明提前：</h4>
+
+<p><strong>第一种情况：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">isItHoisted</span><span class="p">();</span><span class="c1">//&#34;Yes!&#34;
+</span><span class="c1"></span><span class="kd">function</span> <span class="nx">isItHoisted</span><span class="p">()</span> <span class="p">{</span>  
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;Yes!&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>如上所示，JavaScript 解释器允许你在函数声明之前使用，也就是说，函数声明并不仅仅是函数名“被提前”了，整个函数的定义也“被提前”了！所以上述代码能够正确执行。</p>
+
+<p><strong>第二种情况：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">funca</span><span class="p">();</span><span class="c1">//&#34;Definition hoisted!&#34;
+</span><span class="c1"></span><span class="nx">funcb</span><span class="p">();</span><span class="c1">//抛出错误：undefined is not a function
+</span><span class="c1"></span> 
+<span class="kd">function</span> <span class="nx">funca</span><span class="p">()</span> <span class="p">{</span>  
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;Definition hoisted!&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">funcb</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>  
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;Definition not hoisted!&#34;</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>我们做了一个对比，funca函数被妥妥的执行了，符合第一种类型；funcb函数 变量“被提前”了，但是他的赋值（也就是函数）并没有被提前，从这一点上来说，和前面我们所讲的变量“被提前”是完全一致的，并且，由于“被提前”的变量的默认值是 <code>undefined</code> ，所以报的错误属于“类型不匹配”，因为 undefined 不是函数，当然不能被调用。</p>
+
+<h3 id="总结">总结</h3>
+
+<p>通过上面的讲解可以总结如下：</p>
+
+<ul>
+<li>变量的声明被提前到作用域顶部，赋值保留在原地</li>
+<li>函数声明方式定义函数整个“被提前”</li>
+<li>函数直接量定义函数的方式只有变量“被提前”了，函数没有“被提前”</li>
+</ul>
+
+<p>正好和前面所说的函数定义的三种不同方式的区别是吻合的。</p>
+
+<p>所以提醒大家：作为最佳实践，变量声明一定要放在作用域/函数的最上方（JavaScript 只有函数作用域！）。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2016-03-08
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/javascript/">JavaScript</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/iframe-cross-domain/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">iframe之间的跨域和通信</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/js-chained-call/">
+            <span class="next-text nav-default">js的链式调用分析</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

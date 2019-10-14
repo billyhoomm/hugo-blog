@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Nginx反向代理Nodejs详细配置 - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="前言 空余时间学习使用vue.js&#43;webpack制作了一个简单的nodejs网站，web服务器使用express构建，而个人的云服务器是部署" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/nginx-reverse-proxy-nodejs/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Nginx反向代理Nodejs详细配置" />
+<meta property="og:description" content="前言 空余时间学习使用vue.js&#43;webpack制作了一个简单的nodejs网站，web服务器使用express构建，而个人的云服务器是部署" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/nginx-reverse-proxy-nodejs/" />
+<meta property="article:published_time" content="2017-02-18T21:57:50+08:00" />
+<meta property="article:modified_time" content="2017-02-18T21:57:50+08:00" />
+<meta itemprop="name" content="Nginx反向代理Nodejs详细配置">
+<meta itemprop="description" content="前言 空余时间学习使用vue.js&#43;webpack制作了一个简单的nodejs网站，web服务器使用express构建，而个人的云服务器是部署">
+
+
+<meta itemprop="datePublished" content="2017-02-18T21:57:50&#43;08:00" />
+<meta itemprop="dateModified" content="2017-02-18T21:57:50&#43;08:00" />
+<meta itemprop="wordCount" content="2155">
+
+
+
+<meta itemprop="keywords" content="NodeJS,Nginx," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Nginx反向代理Nodejs详细配置"/>
+<meta name="twitter:description" content="前言 空余时间学习使用vue.js&#43;webpack制作了一个简单的nodejs网站，web服务器使用express构建，而个人的云服务器是部署"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">刻舟求剑</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">刻舟求剑</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Nginx反向代理Nodejs详细配置</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-02-18 </span>
+        <div class="post-category">
+            <a href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"> 服务器 </a>
+            </div>
+          <span class="more-meta"> 约 2155 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#一-反向代理原理">一、反向代理原理</a></li>
+<li><a href="#二-nginx核心配置文件nginx-conf解释">二、Nginx核心配置文件nginx.conf解释</a></li>
+<li><a href="#三-反向代理配置">三、反向代理配置</a></li>
+<li><a href="#四-nginx基本指令-基于centos6-5">四、nginx基本指令(基于centos6.5)</a></li>
+<li><a href="#五-关于反向代理的gzip压缩配置">五、关于反向代理的Gzip压缩配置</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<blockquote>
+<p>前言</p>
+</blockquote>
+
+<p>空余时间学习使用vue.js+webpack制作了一个简单的nodejs网站，web服务器使用express构建，而个人的云服务器是部署的LNMP环境，已经搭建了一个wordpress网站，为了不影响wordpress的运行遂google到了使用nginx反向代理的方法，非常好用。不过也可以使用nodejs的<a href="https://github.com/nodejitsu/node-http-proxy">http-proxy</a>模块，感兴趣可以查看一下，我对这个也不是很明了，不作介绍。</p>
+
+<h2 id="一-反向代理原理">一、反向代理原理</h2>
+
+<p>先看图：
+<img src="http://cdn.billyh.cn/blogUploads/1511704841000.jpeg" alt="" />
+对上图的理解是：</p>
+
+<p><strong>正向代理</strong>：在客户这一端，替客户收发请求。</p>
+
+<p><strong>反向代理</strong>：在服务器机房这一端，替服务器收发请求，也就是说请求和响应都先经过反向代理。具有缓存、安全、负载均衡等作用。</p>
+
+<h2 id="二-nginx核心配置文件nginx-conf解释">二、Nginx核心配置文件nginx.conf解释</h2>
+
+<p>(如无特别需要并且不懂nginx一般可使用自动配置)</p>
+
+<p><strong>1、进程数与每个进程的最大连接数</strong>：</p>
+
+<ul>
+<li>nginx进程数，建议设置为等于CPU总核心数</li>
+
+<li><p>单个进程最大连接数，那么该服务器的最大连接数=连接数*进程数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="c1">#工作进程个数，一般跟服务器cpu核数相等，或者核数的两倍
+</span><span class="c1"></span><span class="k">worker_processes</span> <span class="mi">2</span><span class="p">;</span>
+
+<span class="c1">#单个进程最大连接数
+</span><span class="c1"></span><span class="k">events{</span>
+<span class="s">worker_connections</span> <span class="mi">1024</span><span class="p">;</span> 
+<span class="k">}</span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+
+<p><strong>2、Nginx的基本配置</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="c1">#nginx基本配置
+</span><span class="c1"></span><span class="k">server{</span>
+    <span class="s">listen</span> <span class="mi">8088</span><span class="p">;</span>    <span class="c1">#端口号
+</span><span class="c1"></span>    <span class="k">server_name</span> <span class="mi">192</span><span class="s">.168.22.227</span><span class="p">;</span> <span class="c1">#服务名
+</span><span class="c1"></span><span class="k">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>3、负载均衡列表基本配置</strong>：
+- location / {}：对aspx后缀的进行负载均衡请求，假如我们要对所有的aspx后缀的文件进行负载均衡时，可以这样写：location ~ .*.aspx$ {}
+- proxy_pass：请求转向自定义的服务器列表，这里我们将请求都转向标识为<a href="http://cuitccol.com的负载均衡服务器列表；">http://cuitccol.com的负载均衡服务器列表；</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx">    <span class="c1">#服务器集群
+</span><span class="c1"></span>    <span class="k">upstream</span> <span class="s">mycluster</span><span class="p">{</span>
+        <span class="c1">#这里添加的是上面启动好的两台Tomcat服务器
+</span><span class="c1"></span>         <span class="kn">server</span> <span class="n">192.168.22.229</span><span class="p">:</span><span class="mi">8080</span> <span class="s">weight=1</span><span class="p">;</span>
+         <span class="kn">server</span> <span class="n">192.168.22.230</span><span class="p">:</span><span class="mi">8080</span> <span class="s">weight=1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">location</span> <span class="s">/</span><span class="p">{</span>
+        <span class="c1">#将访问请求转向至服务器集群,mycluster和上面upstream mycluster 对应
+</span><span class="c1"></span>        <span class="kn">proxy_pass</span> <span class="s">http://mycluster</span><span class="p">;</span>
+        <span class="c1"># 真实的客户端IP
+</span><span class="c1"></span>        <span class="kn">proxy_set_header</span>   <span class="s">X-Real-IP</span>        <span class="nv">$remote_addr</span><span class="p">;</span> 
+        <span class="c1"># 请求头中Host信息
+</span><span class="c1"></span>        <span class="kn">proxy_set_header</span>   <span class="s">Host</span>             <span class="nv">$host</span><span class="p">;</span> 
+        <span class="c1"># 代理路由信息，此处取IP有安全隐患
+</span><span class="c1"></span>        <span class="kn">proxy_set_header</span>   <span class="s">X-Forwarded-For</span>  <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+        <span class="c1"># 真实的用户访问协议
+</span><span class="c1"></span>        <span class="kn">proxy_set_header</span>   <span class="s">X-Forwarded-Proto</span> <span class="nv">$scheme</span><span class="p">;</span>
+    <span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>在负载均衡服务器列表的配置中，weight是权重，可以根据机器配置定义权重（如果某台服务器的硬件配置十分好，可以处理更多的请求，那么可以 为其设置一个比较高的weight；而有一台的服务器的硬件配置比较差，那么可以将前一台的weight配置为weight=2，后一台差的配置为 weight=1）。weigth参数表示权值，权值越高被分配到的几率越大；</li>
+</ul>
+
+<p><strong>4、Nginx对于静态文件的缓存配置</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="k">server</span>
+    <span class="p">{</span>
+        <span class="kn">location</span> <span class="p">~</span> <span class="sr">.*\.(gif|jpg|jpeg|png|bmp|swf)$</span>
+        <span class="p">{</span>
+            <span class="c1"># 过期时效
+</span><span class="c1"></span>            <span class="kn">expires</span>      <span class="s">30d</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kn">location</span> <span class="p">~</span> <span class="sr">.*\.(js|css)?$</span>
+        <span class="p">{</span>
+            <span class="kn">expires</span>      <span class="s">12h</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kn">location</span> <span class="p">~</span> <span class="sr">/\.</span>
+        <span class="p">{</span>
+            <span class="kn">deny</span> <span class="s">all</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>5、虚拟主机配置</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"> <span class="k">include</span> <span class="n">/etc/nginx/conf.d/*.conf</span>;</code></pre></td></tr></table>
+</div>
+</div>
+<p>（如果没有此配置需添加至http配置项的末尾）</p>
+
+<h2 id="三-反向代理配置">三、反向代理配置</h2>
+
+<p>如图(如果没有此文件夹可新建一个conf.d文件夹)：
+<img src="http://cdn.billyh.cn/blogUploads/1511630769000.jpeg" alt="" />
+在此文件夹中新建虚拟主机文件，命名为*.conf(*为自定义)，加入下列基本配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="k">upstream</span> <span class="s">blog</span> <span class="p">{</span>
+    <span class="kn">server</span> <span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">8081</span><span class="p">;</span> <span class="c1"># 这里的端口号写你node.js运行的端口号，也就是要代理的端口号，我的项目跑在8081端口上
+</span><span class="c1"></span>    <span class="kn">keepalive</span> <span class="mi">64</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">upstream</span> <span class="s">www</span> <span class="p">{</span>
+    <span class="kn">server</span> <span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">8080</span><span class="p">;</span> <span class="c1"># 这里的端口号写你node.js运行的端口号，也就是要代理的端口号，我的项目跑在8081端口上
+</span><span class="c1"></span>    <span class="kn">keepalive</span> <span class="mi">64</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span> <span class="c1">#这里的端口号是你要监听的端口号
+</span><span class="c1"></span>    <span class="kn">server_name</span> <span class="s">blog.billyh.cn</span><span class="p">;</span> <span class="c1"># 这里是你的服务器名称，也就是别人访问你服务的ip地址或域名，可以写多个，用空格隔开
+</span><span class="c1"></span>
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$http_host</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Nginx-Proxy</span> <span class="s">true</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">Connection</span> <span class="s">&#34;&#34;</span><span class="p">;</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://blog</span><span class="p">;</span> <span class="c1"># 这里要和最上面upstream后的应用名一致，可以自定义
+</span><span class="c1"></span>    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span> <span class="c1">#这里的端口号是你要监听的端口号
+</span><span class="c1"></span>    <span class="kn">server_name</span> <span class="s">www.billyh.cn</span><span class="p">;</span> <span class="c1"># 这里是你的服务器名称，也就是别人访问你服务的ip地址或域名，可以写多个，用空格隔开
+</span><span class="c1"></span>
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$http_host</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Nginx-Proxy</span> <span class="s">true</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">Connection</span> <span class="s">&#34;&#34;</span><span class="p">;</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://www</span><span class="p">;</span> <span class="c1"># 这里要和最上面upstream后的应用名一致，可以自定义
+</span><span class="c1"></span>    <span class="p">}</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>server_name 代表需要绑定的域名</p>
+
+<p>proxy_pass 设置服务器上需要代理的程序的地址（在本例中是由express监听的端口）</p>
+
+<p>listen 设置 nginx 监听端口，默认80</p>
+
+<p>至此就算配置成功了，只需重启nginx即可生效</p>
+
+<h2 id="四-nginx基本指令-基于centos6-5">四、nginx基本指令(基于centos6.5)</h2>
+
+<p>启动：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="k">nginx</span> <span class="s">-c</span> <span class="s">/etc/nginx/（配置文件路径）nginx.conf</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>停止：
+- 查询nginx主进程号：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">ps -ef | grep nginx</pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><p>从容停止Nginx</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">kill QUIT 主进程号</pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+
+<p>重启：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">kill -HUP 主进称号或进程号文件路径</pre></td></tr></table>
+</div>
+</div>
+<p>或者</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">/usr/nginx/sbin/（nginx路径）nginx -s reload</pre></td></tr></table>
+</div>
+</div>
+<h2 id="五-关于反向代理的gzip压缩配置">五、关于反向代理的Gzip压缩配置</h2>
+
+<p>在使用Nginx反向代理nodejs时最好的压缩方法时在Nginx端启动Gzip，如下nginx.conf配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-nginx" data-lang="nginx">        <span class="k">gzip</span> <span class="no">on</span><span class="p">;</span>
+        <span class="k">gzip_min_length</span>  <span class="mi">1k</span><span class="p">;</span>
+        <span class="k">gzip_buffers</span>     <span class="mi">4</span> <span class="mi">16k</span><span class="p">;</span>
+        <span class="k">gzip_http_version</span> <span class="mi">1</span><span class="s">.1</span><span class="p">;</span>
+        <span class="k">gzip_comp_level</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="k">gzip_types</span>     <span class="s">text/plain</span> <span class="s">application/javascript</span> <span class="s">application/x-javascript</span> <span class="s">text/javascript</span> <span class="s">text/css</span> <span class="s">application/xml</span> <span class="s">application/xml+rss</span><span class="p">;</span>
+        <span class="k">gzip_vary</span> <span class="no">on</span><span class="p">;</span>
+        <span class="k">gzip_proxied</span>   <span class="s">expired</span> <span class="s">no-cache</span> <span class="s">no-store</span> <span class="s">private</span> <span class="s">auth</span><span class="p">;</span>
+        <span class="k">gzip_disable</span>   <span class="s">&#34;MSIE</span> <span class="s">[1-6]\.&#34;</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>另：</strong></p>
+
+<p>我个人网站在启动Nginx的Gzip之后，访问nodejs站的时候经常出现刷新的时候响应缓慢，于是我在nodejs上也配置了压缩，一下是以express为前提的配置：
+- 首先安装compression依赖</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">npm install compression</pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><p>在app.js中添加相应配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">compression</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;compression&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">compression</span><span class="p">());</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>在两边都开启压缩的情况下，响应变得正常了，但是却与很多官方的说法相悖，官方说法是在开发过程中只需要配置Nginx端的Gzip，nodejs端不用compression，所以我疑惑的这个问题目前还没想明白。
+&gt; PS：后续还会继续测试，如果有新的结果，会继续补上。</p></li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2017-02-18
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/nodejs/">NodeJS</a>
+          <a href="/tags/nginx/">Nginx</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/front-end-engineering-of-webpack/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">基于Webpack的前端工程化</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/cors-to-sum-up/">
+            <span class="next-text nav-default">跨域方案CORS使用总结</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

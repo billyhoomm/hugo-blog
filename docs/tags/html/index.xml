@@ -13,19 +13,19 @@
     
     <item>
       <title>highlight.js完美配合marked</title>
-      <link>https://billyhu.com/post/highlight.js%E5%AE%8C%E7%BE%8E%E9%85%8D%E5%90%88marked/</link>
+      <link>https://billyhu.com/post/highlight.js-marked/</link>
       <pubDate>Sat, 26 May 2018 23:14:20 +0800</pubDate>
       
-      <guid>https://billyhu.com/post/highlight.js%E5%AE%8C%E7%BE%8E%E9%85%8D%E5%90%88marked/</guid>
+      <guid>https://billyhu.com/post/highlight.js-marked/</guid>
       <description>前言：Using highlight.js with marked 这是我的自建博客系统使用Marked.js来parsemarkdown文件再结合highlight.js来让代码高亮的</description>
     </item>
     
     <item>
       <title>overflow与BFC</title>
-      <link>https://billyhu.com/post/overflow%E4%B8%8Ebfc/</link>
+      <link>https://billyhu.com/post/overflow-bfc/</link>
       <pubDate>Thu, 24 May 2018 11:26:50 +0800</pubDate>
       
-      <guid>https://billyhu.com/post/overflow%E4%B8%8Ebfc/</guid>
+      <guid>https://billyhu.com/post/overflow-bfc/</guid>
       <description>BFC（Block Formatting Context，块级格式化上下文） 是 CSS 渲染过程中进行布局的盒子，所有浮动子元素都在盒子内进行布局。 也就是说 BFC 内的浮动元素</description>
     </item>
     

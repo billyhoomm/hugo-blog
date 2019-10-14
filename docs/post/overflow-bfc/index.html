@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>overflow与BFC - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="BFC（Block Formatting Context，块级格式化上下文） 是 CSS 渲染过程中进行布局的盒子，所有浮动子元素都在盒子内进行布局。 也就是说 BFC 内的浮动元素" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/overflow-bfc/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="overflow与BFC" />
+<meta property="og:description" content="BFC（Block Formatting Context，块级格式化上下文） 是 CSS 渲染过程中进行布局的盒子，所有浮动子元素都在盒子内进行布局。 也就是说 BFC 内的浮动元素" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/overflow-bfc/" />
+<meta property="article:published_time" content="2018-05-24T11:26:50+08:00" />
+<meta property="article:modified_time" content="2018-05-24T11:26:50+08:00" />
+<meta itemprop="name" content="overflow与BFC">
+<meta itemprop="description" content="BFC（Block Formatting Context，块级格式化上下文） 是 CSS 渲染过程中进行布局的盒子，所有浮动子元素都在盒子内进行布局。 也就是说 BFC 内的浮动元素">
+
+
+<meta itemprop="datePublished" content="2018-05-24T11:26:50&#43;08:00" />
+<meta itemprop="dateModified" content="2018-05-24T11:26:50&#43;08:00" />
+<meta itemprop="wordCount" content="1079">
+
+
+
+<meta itemprop="keywords" content="css,html," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="overflow与BFC"/>
+<meta name="twitter:description" content="BFC（Block Formatting Context，块级格式化上下文） 是 CSS 渲染过程中进行布局的盒子，所有浮动子元素都在盒子内进行布局。 也就是说 BFC 内的浮动元素"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">刻舟求剑</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">刻舟求剑</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">overflow与BFC</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-05-24 </span>
+        <div class="post-category">
+            <a href="/categories/css/"> css </a>
+            </div>
+          <span class="more-meta"> 约 1079 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#清除环绕">清除环绕</a></li>
+<li><a href="#包裹浮动元素">包裹浮动元素</a></li>
+<li><a href="#独立布局环境">独立布局环境</a>
+<ul>
+<li>
+<ul>
+<li><a href="#参考文章">参考文章：</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<p><strong>BFC</strong>（<code>Block Formatting Context</code>，块级格式化上下文） 是 CSS 渲染过程中进行布局的盒子，所有浮动子元素都在盒子内进行布局。 也就是说 BFC 内的浮动元素不会影响到 BFC 外部，BFC 外部的环境也不会影响 BFC 内的布局。</p>
+
+<p><code>MDN</code> 共列出 8 类可以生成 BFC 的元素，包括浮动和绝对定位元素、行内块，以及<code>overflow</code> 不为 <code>visible</code> 的元素。 比如，设置<code>overflow:hidden</code> 可以开启一个 BFC。</p>
+
+<blockquote>
+<p>HTML 采用流式布局方式，float属性在这种环境下非常重要。 float 常与 overflow 配合使用都是因为 overflow 会创建新的 BFC，进而影响布局。</p>
+</blockquote>
+
+<h2 id="清除环绕">清除环绕</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;border:1px solid #000;width:300px;&#34;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;float:left;background: yellow;height:100px;width:150px;&#34;</span><span class="nt">&gt;</span>float:left<span class="nt">&lt;/div&gt;</span> 
+  <span class="nt">&lt;div&gt;</span> Eros. Nunc ac tellus in sapien molestie rhoncus. Pellentesque nisl. Praesent venenatis blandit velit. Fusce rutrum.  Leo diam interdum ligula, eu scelerisque sem purus in tellus.<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>代码效果如下：
+<img src="http://cdn.billyhu.com/blogUploads/1527144681000.png" alt="" /></p>
+
+<p>但是当我们需要分栏布局时，就要清除环绕效果。这里有几种方法：
+- 给右侧<div>添加<code>margin-left</code>。
+- 给父容器的::after设置<code>clear:both</code>
+- 将右侧div设置为<code>overflow:hidden</code></p>
+
+<p>看到<code>overflow:hidden</code>，觉得这个方法很神奇，而本质上是因为它创建了一个BFC，因为BFC达到的效果是内部布局不受外部浮动的影响，所以文字就不会再环绕了：
+<img src="http://cdn.billyhu.com/blogUploads/1527144940000.png" alt="" /></p>
+
+<h2 id="包裹浮动元素">包裹浮动元素</h2>
+
+<p>在前端开发中我们经常会碰到一个父元素内只包含浮动元素，但是父元素没有设置宽高，无法撑开子元素：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;background:red;width:300px;&#34;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;width:150px;height:100px;float:left;border:1px solid #000;&#34;</span><span class="nt">&gt;</span>Child<span class="nt">&lt;/div&gt;</span>
+  Parent
+<span class="nt">&lt;/div&gt;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><img src="http://cdn.billyhu.com/blogUploads/1527145390000.png" alt="" /></p>
+
+<p>加上<code>overflow:hidden</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;overflow:hidden;background:red;width:300px;&#34;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;width:150px;height:100px;float:left;border:1px solid #000;&#34;</span><span class="nt">&gt;</span>Child<span class="nt">&lt;/div&gt;</span>
+  Parent
+<span class="nt">&lt;/div&gt;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><img src="http://cdn.billyhu.com/blogUploads/1527145468000.png" alt="" /></p>
+
+<p>BFC内部元素不能影响外部，因此浮动子元素不可显示在父元素之外。 而父元素高度为零，难道不显示子元素了吗？ CSS决定这时就用父元素来包裹子元素吧！ 于是父元素便和子元素等高了，红色背景也就显示出来。</p>
+
+<h2 id="独立布局环境">独立布局环境</h2>
+
+<p><code>overflow:hidden</code>在经典的两栏布局中非常有用</p>
+
+<p>当整个页面采用两栏布局：左侧是Sidebar定宽且向左浮动，右侧是Content自适应：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;width:320px;border:1px solid black;&#34;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;float:left;width:100px;background:yellow;height:200px;&#34;</span><span class="nt">&gt;</span>Sidebar<span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">style=</span><span class="s">&#34;background:lightblue;&#34;</span><span class="nt">&gt;</span> User: Alice <span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;clear: both;&#34;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">style=</span><span class="s">&#34;background:lightblue;&#34;</span><span class="nt">&gt;</span> User: Bob <span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;clear: both;&#34;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">style=</span><span class="s">&#34;background:lightblue;&#34;</span><span class="nt">&gt;</span> User: Charlie <span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>当前情况是我假设右侧列表项内部布局存在浮动，我们需要在每个列表项后面清除浮动，但是这样做会将整个页面布局的浮动清除了，产生了下面的效果：
+<img src="http://cdn.billyhu.com/blogUploads/1527145967000.png" alt="" /></p>
+
+<p>所以我需要给右侧容器创建独立的布局环境，这时候就用到了<code>overflow:hidden</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;width:320px;border:1px solid black;&#34;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;float:left;width:100px;background:yellow;height:200px;&#34;</span><span class="nt">&gt;</span>Sidebar<span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;overflow:hidden&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">style=</span><span class="s">&#34;background:lightblue;&#34;</span><span class="nt">&gt;</span> User: Alice <span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;clear: both;&#34;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">style=</span><span class="s">&#34;background:lightblue;&#34;</span><span class="nt">&gt;</span> User: Bob <span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&#34;clear: both;&#34;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">style=</span><span class="s">&#34;background:lightblue;&#34;</span><span class="nt">&gt;</span> User: Charlie <span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><img src="http://cdn.billyhu.com/blogUploads/1527146088000.png" alt="" /></p>
+
+<h4 id="参考文章">参考文章：</h4>
+
+<blockquote>
+<p>MDN：<a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context">https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context</a></p>
+
+<p>Harttle Land：<a href="https://harttle.land/2016/05/11/block-formatting-context.html">https://harttle.land/2016/05/11/block-formatting-context.html</a></p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2018-05-24
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/css/">css</a>
+          <a href="/tags/html/">html</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/highlight.js-marked/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">highlight.js完美配合marked</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/brower-http-request-reissue/">
+            <span class="next-text nav-default">浏览器的Http请求重发机制</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

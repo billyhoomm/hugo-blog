@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>深入理解Stream和Buffer - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="Stream stream是Node.js提供的又一个仅在服务区端可用的模块，目的是支持“流”这种数据结构。 流是一种抽象的数据结构。想象水流，当在水管中" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/learning-stream-and-buffer/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="深入理解Stream和Buffer" />
+<meta property="og:description" content="Stream stream是Node.js提供的又一个仅在服务区端可用的模块，目的是支持“流”这种数据结构。 流是一种抽象的数据结构。想象水流，当在水管中" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/learning-stream-and-buffer/" />
+<meta property="article:published_time" content="2017-12-09T16:26:50+08:00" />
+<meta property="article:modified_time" content="2017-12-09T16:26:50+08:00" />
+<meta itemprop="name" content="深入理解Stream和Buffer">
+<meta itemprop="description" content="Stream stream是Node.js提供的又一个仅在服务区端可用的模块，目的是支持“流”这种数据结构。 流是一种抽象的数据结构。想象水流，当在水管中">
+
+
+<meta itemprop="datePublished" content="2017-12-09T16:26:50&#43;08:00" />
+<meta itemprop="dateModified" content="2017-12-09T16:26:50&#43;08:00" />
+<meta itemprop="wordCount" content="3156">
+
+
+
+<meta itemprop="keywords" content="NodeJS," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="深入理解Stream和Buffer"/>
+<meta name="twitter:description" content="Stream stream是Node.js提供的又一个仅在服务区端可用的模块，目的是支持“流”这种数据结构。 流是一种抽象的数据结构。想象水流，当在水管中"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">刻舟求剑</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">刻舟求剑</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">深入理解Stream和Buffer</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-12-09 </span>
+        <div class="post-category">
+            <a href="/categories/nodejs/"> NodeJS </a>
+            </div>
+          <span class="more-meta"> 约 3156 字 </span>
+          <span class="more-meta"> 预计阅读 7 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#stream">Stream</a>
+<ul>
+<li><a href="#思考一个场景">思考一个场景</a></li>
+<li><a href="#简单示例-从文件流中读取文本内容">简单示例：从文件流中读取文本内容</a></li>
+<li><a href="#pipe">pipe</a></li>
+<li><a href="#readable和writeable">Readable和Writeable</a></li>
+</ul></li>
+<li><a href="#buffer">Buffer</a>
+<ul>
+<li><a href="#独立内存">独立内存</a></li>
+<li><a href="#8kb载体">8KB载体</a></li>
+<li><a href="#字符串拼接">字符串拼接</a></li>
+<li><a href="#编码格式">编码格式</a></li>
+</ul></li>
+<li><a href="#总结">总结</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="stream">Stream</h2>
+
+<p>stream是Node.js提供的又一个仅在服务区端可用的模块，目的是支持“流”这种数据结构。
+流是一种抽象的数据结构。想象水流，当在水管中流动时，就可以从某个地方源源不断地到达另一个地方，所以可以把数据看成是数据流。</p>
+
+<p>有些流用来读取数据，比如从文件读取数据时，可以打开一个文件流，然后从文件流中不断地读取数据。有些流用来写入数据，比如向文件写入数据时，只需要把数据不断地往文件流中写进去就可以了。</p>
+
+<h3 id="思考一个场景">思考一个场景</h3>
+
+<p>在node中拷贝一个文件的内容到另一个文件中差不多是这样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;/path/to/source&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">encoding</span><span class="o">:</span> <span class="s1">&#39;utf8&#39;</span><span class="p">});</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="s1">&#39;/path/to/dest&#39;</span><span class="p">,</span> <span class="nx">source</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>也就是先将一个完整文件读到内存，再将内存中数据写入对应文件，小文件这样做是没问题的，但是就像我现在正在写的一个服务，视频和音频转存服务，视频大小基本保持在100M以上，直接读这样的文件，服务内存分分钟被撑爆。</p>
+
+<p>面对这种大文件，我们应该是像上面提到的像水管一样读，不断反复直到文件全部读取完毕，写入也结束。</p>
+
+<p><strong>Tips：</strong>
+&gt; V8引擎默认限制了堆内存的大小，64位系统为1.4G，32位系统为0.7G，这样的默认设计主要是考虑到V8的垃圾回收效率，如果内存超过1.5G，做一次小的垃圾回收，时间就可能在50ms以上</p>
+
+<p>在Node.js中，流是一个对象，我们只需要响应流的事件就可以了：data事件表示流的数据已经可以读取了，end事件表示这个流已经到末尾了，没有数据可以读取了，error事件表示出错了。</p>
+
+<h3 id="简单示例-从文件流中读取文本内容">简单示例：从文件流中读取文本内容</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+
+<span class="c1">// 打开一个流:
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">rs</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="s1">&#39;sample.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">);</span>
+
+<span class="nx">rs</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;DATA:&#39;</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">rs</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;END&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">rs</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;ERROR: &#39;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>data事件可能会有多次，每次传递的chunk是流的一部分数据。</p>
+</blockquote>
+
+<h3 id="pipe">pipe</h3>
+
+<p>就像可以把两个水管串成一个更长的水管一样，两个流也可以串起来。一个Readable流和一个Writable流串起来后，所有的数据自动从Readable流进入Writable流，这种操作叫pipe。</p>
+
+<p>用pipe()把一个文件流和另一个文件流串起来，这样源文件的所有数据就自动写入到目标文件里了，所以，这实际上是一个复制文件的程序：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">rs</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="s1">&#39;sample.txt&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">createWriteStream</span><span class="p">(</span><span class="s1">&#39;copied.txt&#39;</span><span class="p">);</span>
+
+<span class="nx">rs</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">ws</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>当end事件触发后，将自动关闭Writable流</p>
+</blockquote>
+
+<h3 id="readable和writeable">Readable和Writeable</h3>
+
+<blockquote>
+<p>上面演示了fs.createReadStream和 fs.createWriteStream实现的流的功能，fs模块的这两个接口其实是基于stream模块的Readable和Writeable来实现的。</p>
+</blockquote>
+
+<p>Readable为可读取流，Writable即可写流，首先Readable它分为流动模式和暂停模式两种，我们大部分时候都会应用到它的流动模式，但初始化一个Readable流的时候，它是暂停模式的，想将它变为流动模式有以下方法：
+- 1、添加一个data事件的监听器来监听数据
+- 2、 调用resume()方法来明确开启流动模式
+- 3、 调用pipe()方法将数据导入一个可写流</p>
+
+<p>第一种也就是上面例子中的<code>rs.on('data')</code>，会持续读取，但其实这样会有一些问题：当在回调函数中有写文件操作时，写入的速度低于读取的速度时，会造成数据的丢失</p>
+
+<p>第二种可以控制速度的pause + resume方式可以解决上面问题：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">rs</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="s1">&#39;source/file&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">createWriteStream</span><span class="p">(</span><span class="s1">&#39;dest/file&#39;</span><span class="p">);</span>
+
+<span class="nx">rs</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">chunk</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">ws</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="o">===</span> <span class="kc">false</span><span class="p">){</span> <span class="c1">//【write()方法是有返回值的，该方法会返回true或者false，返回true说明已经将数据写入，返回false则说明数据尚未写完】
+</span><span class="c1"></span>    <span class="nx">rs</span><span class="p">.</span><span class="nx">pause</span><span class="p">();</span><span class="c1">// 尚未写完，停止读取
+</span><span class="c1"></span>  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">ws</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;drain&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="nx">rs</span><span class="p">.</span><span class="nx">resume</span><span class="p">();</span> <span class="c1">// 数据已经写完，继续读取
+</span><span class="c1"></span><span class="p">});</span>
+
+<span class="nx">rs</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span> <span class="c1">// 已经没有更多数据，关闭可写流
+</span><span class="c1"></span>  <span class="nx">ws</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>Tips：</strong>
+&gt; drain事件：这是个啥呢？与HighWaterMark参数（高水位线）有点关系，TODO</p>
+
+<p>第三种就是上面介绍过的pipe（管道）<strong><code>rs.pipe(ws)</code></strong>,只需要一行代码就可以解决上面的所有问题了，这也是Node官方推荐我们使用的</p>
+
+<h2 id="buffer">Buffer</h2>
+
+<blockquote>
+<p>Buffer代表一个缓冲区，存储二进制数据，是字节流。也是应用Stream的基础支撑，我们在网络传输时，就传输的这种字节流。写文件时，也是写的字节流。</p>
+</blockquote>
+
+<h3 id="独立内存">独立内存</h3>
+
+<p>上面提到的Buffer对象都是JavaScript层面上的，能够被V8的垃圾回收标记回收。但其内部的parent属性指向的SlowBuffer对象却来自于Node自身C++中的定义，是C++层面上的Buffer对象，所以内存不在V8的堆中。</p>
+
+<p>当我们需要在内存中存储一些比较大的字符串时，转换为Buffer存储可以降低Node的内存使用率，但也会带来一些问题，比如多了Buffer与String的互转操作，性能比不上原生的String，在高IO场景下也许会带来性能问题。</p>
+
+<h3 id="8kb载体">8KB载体</h3>
+
+<ul>
+<li><p>当我们实例化一个新的Buffer类，会根据实例化时的大小去申请内存空间，如果需要的空间小于8KB，则会多一次判定，判定当前的8KB载体剩余容量是否够新的buffer实例，如果够用，则将新的buffer实例保存在当前的8KB载体中，并且更新剩余的空间。如果不够用，则很悲催剩余空间会被浪费掉。</p></li>
+
+<li><p>如果需要超过8KB的Buffer对象，将会直接分配一个SlowBuffer对象作为slab单元，这个单元将会被这个大Buffer对象所独占。</p></li>
+</ul>
+
+<h3 id="字符串拼接">字符串拼接</h3>
+
+<p>很多代码是这样写：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">let</span> <span class="nx">rs</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="s1">&#39;test.md&#39;</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="nx">rs</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&#34;data&#34;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">data</span> <span class="o">+=</span> <span class="nx">chunk</span><span class="p">;</span> <span class="c1">//等价于data = data.toString() + chunk.toString();
+</span><span class="c1"></span><span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>另外一种是使用<code>Buffer.concat()</code>来拼接</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">let</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="kd">let</span> <span class="nx">clen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
+    <span class="nx">clen</span> <span class="o">+=</span> <span class="nx">chunk</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">buf</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">,</span> <span class="nx">clen</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>测试下的结果是使用<code>data += chunk</code>方式的拼接耗时基本接近<code>Buffer.concat()</code>方式的两倍了，所以性能上考虑明显用后者较好。并且<code>data += chunk</code>方式在处理非UTF-8的字符串以及UTF-8宽字节中文的时候很可能出现乱码错误。</p>
+
+<h3 id="编码格式">编码格式</h3>
+
+<p>字符串是有编码格式的，比如UTF-8。而Buffer是没有编码格式的。两者可以相互转换。转换时必须指定编码格式。</p>
+
+<p>例如：我们最常用的<code>http.createServer</code>的的回调函数的第一个参数<code>req</code>就实现了上文中提到的Readable接口：<code>http.IncomingMessage</code>，在这个流中读到的数据就是Buffer对象，是字节流，而我们在程序中使用时，经常是要转换为String。反过来，res（类型<code>http.ServerResponse</code>，可写的流，实现了Writable接口）有个方法<code>setDefaultEncoding</code>，用来设置流的编码格式，在write数据时，会使用指定的编码格式来编码数据，然后发送给客户端。</p>
+
+<p>就是说，网络传输的是Buffer，程序需要处理String，Buffer和String之间可以转换。Buffer有<code>toString</code>方法，可以按指定的编码格式将字节流转换为String。<code>fs.createWriteStream</code>和<code>fs.createReadStream</code>两个方法都有一个可选参数options，可以指定<code>defaultEncoding</code>，这里指定的编码格式，也是用于在Buffer和String之间转换的。</p>
+
+<p>** iconv-lite**</p>
+
+<p>我们在处理非UTF-8编码的字符串、二进制格式的时候必须得使用Buffer，然而Buffer支持的编码类型有限（utf8、ascii、utf16le、utf16be、ucs2、base64、hex），比如在windows上常见的ANSI（GB2312）编码在node下处理会直接乱码。<a href="https://github.com/ashtuchkin/iconv-lite#extend-nodejs-own-encodings">iconv-lite</a>（纯JS实现）可以实现编码转换</p>
+
+<p><strong>jschardet</strong></p>
+
+<p><a href="https://www.npmjs.com/package/jschardet">jschardet</a>可以检测一段字符串或者读取到的文件的编码方式，并且有准确率的提示。</p>
+
+<h2 id="总结">总结</h2>
+
+<p>好好耍
+各种实现原理有待研究&hellip;</p>
+
+<p>其他各种api可以参考文档：<a href="https://nodejs.org/dist/latest-v8.x/docs/api/">https://nodejs.org/dist/latest-v8.x/docs/api/</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2017-12-09
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/nodejs/">NodeJS</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/file-transfer-service/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">文件中转服务的应用</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/nodejs-thread-asynchronous-and-eventloops/">
+            <span class="next-text nav-default">NodeJS中的线程、异步和事件循环</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

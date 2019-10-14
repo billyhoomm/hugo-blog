@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>使用hugo和github pages搭建个人博客 - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="关于hugo Hugo是一个用Go语言编写的静态网站生成器，它使用起来非常简单，相对于Jekyll复杂的安装设置来说，Hugo仅需要一个二进制" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/use-hugo-and-github-build-a-blog/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="使用hugo和github pages搭建个人博客" />
+<meta property="og:description" content="关于hugo Hugo是一个用Go语言编写的静态网站生成器，它使用起来非常简单，相对于Jekyll复杂的安装设置来说，Hugo仅需要一个二进制" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/use-hugo-and-github-build-a-blog/" />
+<meta property="article:published_time" content="2019-10-02T22:02:01+08:00" />
+<meta property="article:modified_time" content="2019-10-02T22:02:01+08:00" />
+<meta itemprop="name" content="使用hugo和github pages搭建个人博客">
+<meta itemprop="description" content="关于hugo Hugo是一个用Go语言编写的静态网站生成器，它使用起来非常简单，相对于Jekyll复杂的安装设置来说，Hugo仅需要一个二进制">
+
+
+<meta itemprop="datePublished" content="2019-10-02T22:02:01&#43;08:00" />
+<meta itemprop="dateModified" content="2019-10-02T22:02:01&#43;08:00" />
+<meta itemprop="wordCount" content="1444">
+
+
+
+<meta itemprop="keywords" content="hugo,github pages," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="使用hugo和github pages搭建个人博客"/>
+<meta name="twitter:description" content="关于hugo Hugo是一个用Go语言编写的静态网站生成器，它使用起来非常简单，相对于Jekyll复杂的安装设置来说，Hugo仅需要一个二进制"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">刻舟求剑</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">刻舟求剑</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">使用hugo和github pages搭建个人博客</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-10-02 </span>
+        <div class="post-category">
+            <a href="/categories/%E5%8D%9A%E5%AE%A2/"> 博客 </a>
+            </div>
+          <span class="more-meta"> 约 1444 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#关于hugo">关于hugo</a></li>
+<li><a href="#安装">安装</a></li>
+<li><a href="#生成博客">生成博客</a></li>
+<li><a href="#安装主题">安装主题</a></li>
+<li><a href="#启动">启动</a></li>
+<li><a href="#部署">部署</a></li>
+<li><a href="#自定义域名-https">自定义域名&amp;HTTPS</a></li>
+<li><a href="#博客相关配置">博客相关配置</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="关于hugo">关于hugo</h2>
+
+<p>Hugo是一个用Go语言编写的静态网站生成器，它使用起来非常简单，相对于Jekyll复杂的安装设置来说，Hugo仅需要一个二进制文件hugo(hugo.exe)即可轻松用于本地调试和生成静态页面。</p>
+
+<p>另外，个人觉得相对于hexo的话，hugo更具个人特色</p>
+
+<blockquote>
+<p>官网： <a href="https://gohugo.io/">https://gohugo.io/</a></p>
+</blockquote>
+
+<h2 id="安装">安装</h2>
+
+<p>本地hugo客户端</p>
+
+<ul>
+<li>官网下载对应自己机器版本的客户端，我这里是macos：<a href="https://github.com/gohugoio/hugo/releases">https://github.com/gohugoio/hugo/releases</a></li>
+<li>得到名为hugo的exec文件</li>
+<li>直接拖到 <code>/usr/local/bin</code> 文件夹</li>
+<li>终端输入<code>hugo version</code>会看到版本信息输出</li>
+</ul>
+
+<h2 id="生成博客">生成博客</h2>
+
+<p>终端运行<code>hugo new site myblog</code>会生成一个初始化的文件夹</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">▸ archetypes/
+▸ content/
+▸ layouts/
+▸ static/
+config.toml</pre></td></tr></table>
+</div>
+</div>
+<p>config.toml是博客的配置文件，稍候会用到，现在先生成一篇文章试下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">hugo new post/first_article.md</pre></td></tr></table>
+</div>
+</div>
+<p>可以看到在content/post/下产生了一个first_article.md文件</p>
+
+<p>另外，再在根目录创建一个docs文件夹，以用来支持github pages的运行</p>
+
+<p>现在先按兵不动</p>
+
+<h2 id="安装主题">安装主题</h2>
+
+<p>hugo官网推荐了各种特色的主题，可以随意选择，我目前使用的一个叫even的主题，在myblog根目录运行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">git clone https://github.com/olOwOlo/hugo-theme-even.git themes/even</pre></td></tr></table>
+</div>
+</div>
+<p>在<code>/themes/even/exampleSite/</code>中会有一个<code>config.toml</code>配置文件，拷贝到根目录覆盖掉原来的<code>config.toml</code></p>
+
+<p>注意这里配置文件中的baseUrl为你最后的博客访问地址，默认为本地调试模式的<a href="http://localhost:1313/，如果后续使用github">http://localhost:1313/，如果后续使用github</a> pages的域名或者自定义域名，都需要作修改</p>
+
+<p>其他各种配置参数可以参考该主题在github上的README</p>
+
+<h2 id="启动">启动</h2>
+
+<p>根目录运行</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">hugo server</pre></td></tr></table>
+</div>
+</div>
+<p>浏览器打开<a href="http://localhost:1313/，即可访问到初始页面">http://localhost:1313/，即可访问到初始页面</a></p>
+
+<h2 id="部署">部署</h2>
+
+<p>首先在博客根目录运行<code>hugo</code>，会生成博客运行所需要的静态页面文件</p>
+
+<p>然后去github创建一个空的仓库</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">git init
+git remote add origin https://github.com/billyhoomm/hugo-blog.git
+git add .
+git commit -m &#39;frist commit&#39;
+git push origin master</pre></td></tr></table>
+</div>
+</div>
+<p>前往github，点击该项目的settings，会看到github pages相关的选项</p>
+
+<p><img src="https://cdn.billyhu.com/blogUploads/github_pages.png" alt="" /></p>
+
+<p>1、我这里是使用docs文件夹（前面说过），当然你也可以选择使用根文件夹，这样master分支就只能放静态页面文件了，我觉得这样不太方便</p>
+
+<p>2、如果你不使用自定义域名，那么修改一下配置文件的baseUrl后提交，然后浏览器访问：<a href="https://billyhoomm.github.io/">https://billyhoomm.github.io/</a> ，就可以看到你的博客了，</p>
+
+<p>如果你使用自定义域名，请往下看</p>
+
+<h2 id="自定义域名-https">自定义域名&amp;HTTPS</h2>
+
+<p>首先你需要一个域名，国内服务商买需要备案，想省去备案麻烦的话，可以选择国外服务商，比如：<a href="https://sg.godaddy.com/zh">https://sg.godaddy.com/zh</a></p>
+
+<p>在上图第二个地方输入你的域名，第三个地方选择强制HTTPS。</p>
+
+<p>完了后去配置DNS解析</p>
+
+<p>以腾讯云为例：</p>
+
+<p><img src="https://cdn.billyhu.com/blogUploads/tencent_dns.png" alt="" /></p>
+
+<p>我这里添加了一个CNAME记录指向自己的github page地址</p>
+
+<p>一个A记录指向自己github page地址对应的IP，其实这个IP现在一共有四个：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">185.199.108.153
+185.199.109.153
+185.199.110.153
+185.199.111.153</pre></td></tr></table>
+</div>
+</div>
+<p>有条件的可以为根域名添加4个A记录到上面四个IP，但是腾讯云免费情况下只支持两个IP的负载均衡，于是加一个算了&hellip;</p>
+
+<p>接下来查看自己的域名解析是否生效了，linux或者macos可以输入以下命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">dig +noall +answer billyhu.com</pre></td></tr></table>
+</div>
+</div>
+<p><img src="https://cdn.billyhu.com/blogUploads/dns_check.png" alt="" /></p>
+
+<p>查看到结果即为解析成功</p>
+
+<h2 id="博客相关配置">博客相关配置</h2>
+
+<p>接下来配置下config.toml</p>
+
+<p><code>baseURL = &quot;https://billyhu.com&quot;</code></p>
+
+<p>运行<code>hugo</code></p>
+
+<p>然后push上去</p>
+
+<p>大概现在再访问你的域名就可以看到部署好的网站了，如果还不行的话，可以静待一会儿，等其生效。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-10-02
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/hugo/">hugo</a>
+          <a href="/tags/github-pages/">github pages</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/js-codes-semicolon/">
+            <span class="next-text nav-default">JavaScript代码中必须加分号的所有情况</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
