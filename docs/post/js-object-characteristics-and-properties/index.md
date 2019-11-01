@@ -1,10 +1,3 @@
----
-title: "JavaScript对象的特征和属性；"
-date: 2019-10-28T23:22:01+08:00
-tags: ["JavaScript", "Object", "面向对象"]
-categories: ["JavaScript"]
-draft: false
----
 
 ## 什么是对象？
 
@@ -24,7 +17,9 @@ draft: false
 
 早期JavaScript在创造的时候为了模仿Java，在原型的基础上引入了new、this等特性，让它”看起来更像Java“，可能这也是为什么发展到现在，从ES6之后，JavaScript已经完整的拥有了类的概念，让我们可以基于类来描述对象。
 
-##JavaScript中对象的特征
+
+
+## JavaScript中对象的特征
 
 上面介绍了在编程语言中对象应该具有的特点
 
@@ -32,25 +27,25 @@ draft: false
 
 C语言中的指针其实可以更好的来帮助理解内存地址：
 
-> 指针是一个变量，其值是另一个变量的地址，即，内存位置的直接地址；在C中定义的各种类型的指针其实都是一个代表内存地址的长的十六进制数；
+> 指针是一个变量，其值是另一个变量的地址，即，内存位置的直接地址；
 >
-> ```c
-> int    *ip;    /* 一个整型的指针 */
-> double *dp;    /* 一个 double 型的指针 */
-> float  *fp;    /* 一个浮点型的指针 */
-> char   *ch;     /* 一个字符型的指针 */
-> ```
->
+> 在C中定义的各种类型的指针其实都是一个代表内存地址的长的十六进制数；
+
+```c
+int    *ip;    /* 一个整型的指针 */
+double *dp;    /* 一个 double 型的指针 */
+float  *fp;    /* 一个浮点型的指针 */
+char   *ch;     /* 一个字符型的指针 */
+```
+
 > 这个理论在其他编程语言中，包括在JavaScript中都是适用的，只是在C中看起来更底层，可以灵活的运用指针
-
-
 
 关于第二个和第三个特征”状态和行为“，不同语言会使用不同的术语来抽象描述它们，比如C++中称它们为“成员变量”和“成员函数”，Java中则称它们为“属性”和“方法”
 
 在 JavaScript中，将状态和行为统一抽象为“属性”，例如下面，d是一个属性，而函数f也是一个属性，尽管写法不太相同，但是对JavaScript来说，d和f就是两个普通属性
 
 ```javascript
-var o = { 
+var o = {
 	d: 1,
 	f() {
   	console.log(this.d);
@@ -59,6 +54,8 @@ var o = {
 ```
 
 **在实现了对象基本特征的基础上，JavaScript中对象独有的特色是：对象具有高度的动态性，这是因为JavaScript赋予了使用者在运行时为对象添改状态和行为的能力**，这和其他的基于类的、静态的对象设计的语言是完全不同的
+
+
 
 ## JavaScript对象的两类属性
 
@@ -84,7 +81,8 @@ var o = {
 
 ```javascript
 var o = { a: 1 };
-Object.getOwnPropertyDescriptor(o,"a") // {value: 1, writable: true, enumerable: true, configurable: true}
+Object.getOwnPropertyDescriptor(o,"a")
+// {value: 1, writable: true, enumerable: true, configurable: true}
 ```
 
 如果我们要想改变属性的特征：
