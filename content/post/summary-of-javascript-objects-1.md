@@ -1,6 +1,5 @@
 ---
-title: "JavaScript对象的总结【1】"
-subtitle: "JavaScript对象的特征和属性；"
+title: "JavaScript对象的特征和属性；"
 date: 2019-10-28T23:22:01+08:00
 tags: ["JavaScript", "Object", "面向对象"]
 categories: ["JavaScript"]
