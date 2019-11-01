@@ -3,14 +3,63 @@
   
   <url>
     <loc>https://billyhu.com/</loc>
-    <lastmod>2019-10-02T22:02:01+08:00</lastmod>
+    <lastmod>2019-10-28T23:22:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://billyhu.com/categories/</loc>
-    <lastmod>2019-10-02T22:02:01+08:00</lastmod>
+    <lastmod>2019-10-28T23:22:01+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://billyhu.com/categories/javascript/</loc>
+    <lastmod>2019-10-28T23:22:01+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://billyhu.com/tags/javascript/</loc>
+    <lastmod>2019-10-28T23:22:01+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://billyhu.com/post/summary-of-javascript-objects-1/</loc>
+    <lastmod>2019-10-28T23:22:01+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://billyhu.com/tags/object/</loc>
+    <lastmod>2019-10-28T23:22:01+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://billyhu.com/post/</loc>
+    <lastmod>2019-10-28T23:22:01+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://billyhu.com/tags/</loc>
+    <lastmod>2019-10-28T23:22:01+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://billyhu.com/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</loc>
+    <lastmod>2019-10-28T23:22:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -24,20 +73,6 @@
   
   <url>
     <loc>https://billyhu.com/tags/hugo/</loc>
-    <lastmod>2019-10-02T22:02:01+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://billyhu.com/post/</loc>
-    <lastmod>2019-10-02T22:02:01+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://billyhu.com/tags/</loc>
     <lastmod>2019-10-02T22:02:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -67,20 +102,6 @@
   <url>
     <loc>https://billyhu.com/page/</loc>
     <lastmod>2019-09-30T14:00:50+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://billyhu.com/tags/javascript/</loc>
-    <lastmod>2018-06-30T14:00:50+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://billyhu.com/categories/javascript/</loc>
-    <lastmod>2018-06-30T14:00:50+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -156,14 +177,14 @@
   </url>
   
   <url>
-    <loc>https://billyhu.com/tags/nodejs/</loc>
+    <loc>https://billyhu.com/categories/nodejs/</loc>
     <lastmod>2018-03-27T12:26:50+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://billyhu.com/categories/nodejs/</loc>
+    <loc>https://billyhu.com/tags/nodejs/</loc>
     <lastmod>2018-03-27T12:26:50+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

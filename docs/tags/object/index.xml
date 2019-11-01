@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Object on billyhu&#39;s blog</title>
+    <link>https://billyhu.com/tags/object/</link>
+    <description>Recent content in Object on billyhu&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 28 Oct 2019 23:22:01 +0800</lastBuildDate>
+    
+	<atom:link href="https://billyhu.com/tags/object/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>JavaScript对象的总结【1】</title>
+      <link>https://billyhu.com/post/summary-of-javascript-objects-1/</link>
+      <pubDate>Mon, 28 Oct 2019 23:22:01 +0800</pubDate>
+      
+      <guid>https://billyhu.com/post/summary-of-javascript-objects-1/</guid>
+      <description>什么是对象？ 在《面向对象分析与设计》书中，作者Grady Booch替我们做了总结，他认为，从人类的认知角度来说，对象应该是下列事物之一： 一个</description>
+    </item>
+    
+  </channel>
+</rss>
