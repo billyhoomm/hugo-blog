@@ -27,9 +27,7 @@
 
 C语言中的指针其实可以更好的来帮助理解内存地址：
 
-> 指针是一个变量，其值是另一个变量的地址，即，内存位置的直接地址；
->
-> 在C中定义的各种类型的指针其实都是一个代表内存地址的长的十六进制数；
+<small>指针是一个变量，其值是另一个变量的地址，即，内存位置的直接地址；在C中定义的各种类型的指针其实都是一个代表内存地址的长的十六进制数</small>
 
 ```c
 int    *ip;    /* 一个整型的指针 */
@@ -38,7 +36,7 @@ float  *fp;    /* 一个浮点型的指针 */
 char   *ch;     /* 一个字符型的指针 */
 ```
 
-> 这个理论在其他编程语言中，包括在JavaScript中都是适用的，只是在C中看起来更底层，可以灵活的运用指针
+<small>这个理论在其他编程语言中，包括在JavaScript中都是适用的，只是在C中看起来更底层，可以灵活的运用指针</small>
 
 关于第二个和第三个特征”状态和行为“，不同语言会使用不同的术语来抽象描述它们，比如C++中称它们为“成员变量”和“成员函数”，Java中则称它们为“属性”和“方法”
 
@@ -46,14 +44,14 @@ char   *ch;     /* 一个字符型的指针 */
 
 ```javascript
 var o = {
-	d: 1,
-	f() {
-  	console.log(this.d);
-	}    
+  d: 1,
+  f() {
+    console.log(this.d);
+  }
 };
 ```
 
-**在实现了对象基本特征的基础上，JavaScript中对象独有的特色是：对象具有高度的动态性，这是因为JavaScript赋予了使用者在运行时为对象添改状态和行为的能力**，这和其他的基于类的、静态的对象设计的语言是完全不同的
+**在实现了对象基本特征的基础上，JavaScript中对象独有的特色是：对象具有高度的动态性，这是因为JavaScript赋予了使用者在运行时为对象添改状态和行为的能力**，这和其他的基于类的、静态的对象设计的语言是完全不同的。
 
 
 
@@ -81,6 +79,7 @@ var o = {
 
 ```javascript
 var o = { a: 1 };
+
 Object.getOwnPropertyDescriptor(o,"a")
 // {value: 1, writable: true, enumerable: true, configurable: true}
 ```
@@ -89,6 +88,7 @@ Object.getOwnPropertyDescriptor(o,"a")
 
 ```javascript
 var o = { a: 1 };
+
 Object.defineProperty(o, "b", {
   value: 2,
   writable: false,
@@ -96,10 +96,13 @@ Object.defineProperty(o, "b", {
   configurable: true
 });
 //a和b都是数据属性，但特征值变化了
+
 Object.getOwnPropertyDescriptor(o,"a");
-// {value: 1, writable: true, enumerable: true, configurable: true} 
+// {value: 1, writable: true, enumerable: true, configurable: true}
+
 Object.getOwnPropertyDescriptor(o,"b");
 // {value: 2, writable: false, enumerable: false, configurable: true}
+
 o.b = 3;
 console.log(o.b);// 2
 ```
@@ -114,6 +117,7 @@ var o = {
     return 1
   }
 };
+
 console.log(o.a); // 1
 ```
 
@@ -123,9 +127,7 @@ console.log(o.a); // 1
 
 所以我们可以基本理解为：`JavaScript对象是一个具有高度动态性的属性的索引结构`
 
-> 索引结构是一类常见的数据结构，我们可以把它理解为一个能够以比较快的速度用key来查找value的字典
->
-> 以上面的对象o为例，‘a’是key，{writable:true,value:1,configurable:true,enumerable:true}是value
+<small>索引结构是一类常见的数据结构，我们可以把它理解为一个能够以比较快的速度用key来查找value的字典。以上面的对象o为例，‘a’是key，{writable:true,value:1,configurable:true,enumerable:true}是value</small>
 
 
 
