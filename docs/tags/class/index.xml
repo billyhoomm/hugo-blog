@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Object on billyhu&#39;s blog</title>
-    <link>https://billyhu.com/tags/object/</link>
-    <description>Recent content in Object on billyhu&#39;s blog</description>
+    <title>class on billyhu&#39;s blog</title>
+    <link>https://billyhu.com/tags/class/</link>
+    <description>Recent content in class on billyhu&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Mon, 09 Dec 2019 10:46:01 +0800</lastBuildDate>
     
-	<atom:link href="https://billyhu.com/tags/object/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://billyhu.com/tags/class/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,15 +18,6 @@
       
       <guid>https://billyhu.com/post/js-way-to-describe-objects/</guid>
       <description>自从ES6中引入了class关键字，基于类的编程方式就成为了JavaScript的官方编程范式，这也解决了之前的使用各种诡异的方式来模拟类的</description>
-    </item>
-    
-    <item>
-      <title>JavaScript对象的特征和属性</title>
-      <link>https://billyhu.com/post/js-object-characteristics-and-properties/</link>
-      <pubDate>Mon, 28 Oct 2019 23:22:01 +0800</pubDate>
-      
-      <guid>https://billyhu.com/post/js-object-characteristics-and-properties/</guid>
-      <description>什么是对象？ 在《面向对象分析与设计》书中，作者Grady Booch替我们做了总结，他认为，从人类的认知角度来说，对象应该是下列事物之一： 一个</description>
     </item>
     
   </channel>

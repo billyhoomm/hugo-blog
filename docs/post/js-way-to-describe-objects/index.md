@@ -1,10 +1,3 @@
----
-title: "JavaScript中描述对象的方式：基于类和基于原型"
-date: 2019-12-09T10:46:01+08:00
-tags: ["JavaScript", "Object", "面向对象编程", "class"]
-categories: ["JavaScript"]
-draft: false
----
 
 自从ES6中引入了class关键字，基于类的编程方式就成为了JavaScript的官方编程范式，这也解决了之前的使用各种诡异的方式来模拟类的编码方式。
 

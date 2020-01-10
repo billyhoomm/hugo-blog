@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>JavaScript中描述对象的方式：基于类和基于原型 - billyhu&#39;s blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="billyhu" /><meta name="description" content="自从ES6中引入了class关键字，基于类的编程方式就成为了JavaScript的官方编程范式，这也解决了之前的使用各种诡异的方式来模拟类的" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.58.3 with theme even" />
+
+
+<link rel="canonical" href="https://billyhu.com/post/js-way-to-describe-objects/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.7efccb17.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="JavaScript中描述对象的方式：基于类和基于原型" />
+<meta property="og:description" content="自从ES6中引入了class关键字，基于类的编程方式就成为了JavaScript的官方编程范式，这也解决了之前的使用各种诡异的方式来模拟类的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://billyhu.com/post/js-way-to-describe-objects/" />
+<meta property="article:published_time" content="2019-12-09T10:46:01+08:00" />
+<meta property="article:modified_time" content="2019-12-09T10:46:01+08:00" />
+<meta itemprop="name" content="JavaScript中描述对象的方式：基于类和基于原型">
+<meta itemprop="description" content="自从ES6中引入了class关键字，基于类的编程方式就成为了JavaScript的官方编程范式，这也解决了之前的使用各种诡异的方式来模拟类的">
+
+
+<meta itemprop="datePublished" content="2019-12-09T10:46:01&#43;08:00" />
+<meta itemprop="dateModified" content="2019-12-09T10:46:01&#43;08:00" />
+<meta itemprop="wordCount" content="2037">
+
+
+
+<meta itemprop="keywords" content="JavaScript,Object,面向对象编程,class," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JavaScript中描述对象的方式：基于类和基于原型"/>
+<meta name="twitter:description" content="自从ES6中引入了class关键字，基于类的编程方式就成为了JavaScript的官方编程范式，这也解决了之前的使用各种诡异的方式来模拟类的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">刻舟求剑</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/page/about">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">刻舟求剑</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/page/about">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">JavaScript中描述对象的方式：基于类和基于原型</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-12-09 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> JavaScript </a>
+            </div>
+          <span class="more-meta"> 约 2037 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#javascript的原型">JavaScript的原型</a></li>
+<li><a href="#new运算">new运算</a></li>
+<li><a href="#es6中的类">ES6中的类</a></li>
+<li><a href="#es6中使用class的注意点">ES6中使用class的注意点</a></li>
+<li><a href="#最后">最后</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<p>自从ES6中引入了class关键字，基于类的编程方式就成为了JavaScript的官方编程范式，这也解决了之前的使用各种诡异的方式来模拟类的编码方式。</p>
+
+<p>同时自ES6以来，作为最出名的基于原型的编程语言，JavaScript也提供了一系列新的内置函数，来方便我们更为直接的访问和操纵原型，这样我们会有两种选择：</p>
+
+<ul>
+<li><p>基于类的面向对象</p></li>
+
+<li><p>基于原型的面向对象</p></li>
+</ul>
+
+<p>概括一下：</p>
+
+<ul>
+<li>”基于类“的编程提倡使用一个关注类和类之间关系的开发模型，我们规划代码时，总是先有类，再从类去实例化一个对象。类和类之间又可能会形成继承、组合等关系，类又往往与语言的类型系统整合，形成一定的编译时能力。</li>
+<li>”基于原型“的编程让我们更关心一系列对象实例的行为，然后才去关心如何将这些对象划分到最近的使用方式相似的原型对象，而不是将它们分成类</li>
+</ul>
+
+<h2 id="javascript的原型">JavaScript的原型</h2>
+
+<p>JavaScript原型系统的主要特点是：</p>
+
+<ul>
+<li>所有的对象都有一个<em>私有字段 [[prototype]]</em> 指向自身的原型对象</li>
+<li>读一个属性，如果对象本身没有，则会继续访问对象的原型，直到原型为空或者找到为止。</li>
+</ul>
+
+<p>ES6提供给我们一系列内置函数，可以更为方便直接的操纵原型：</p>
+
+<ul>
+<li><code>Object.create</code>根据指定的原型对象来创建新对象</li>
+<li><code>Object.getPrototypeOf</code>可以获得一个对象的原型</li>
+<li><code>Object.setPrototypeOf</code>可以设置一个对象的原型</li>
+</ul>
+
+<p>利用上述方法，我们可以抛开类的思维，基于原型来实现抽象和复用，抽象🐈和🐯：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">cat</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">say</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;meow~&#39;</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="nx">jump</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;jump~&#39;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">let</span> <span class="nx">tiger</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">cat</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">say</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;roar!&#34;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+<span class="kd">let</span> <span class="nx">anthorCat</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">cat</span><span class="p">)</span>
+<span class="nx">anthorCat</span><span class="p">.</span><span class="nx">say</span><span class="p">()</span>
+<span class="kd">let</span> <span class="nx">anthorTiger</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">tiger</span><span class="p">)</span>
+<span class="nx">anthorTiger</span><span class="p">.</span><span class="nx">say</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>上面先创建了🐈对象，然后根据🐈为原型做修改创建了🐯，之后再利用Object.create创建其他的🐈和🐯。</p>
+
+<p>这样的话，就可以通过原始的🐈和🐯对象来控制所有的🐈和🐯的行为。</p>
+
+<h2 id="new运算">new运算</h2>
+
+<p>在ES6之前，根本没有Object.create这样的方法，要想指定的对象的[[prototype]]，只能通过new运算来进行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">Base</span><span class="p">(){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">p1</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">p2</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">p1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span> 
+<span class="kd">let</span> <span class="nx">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Base</span><span class="p">;</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">p2</span><span class="p">();</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>上面代码的new运算的实际步骤是：</p>
+
+<ul>
+<li>以构造器c1的 prototype 属性为原型，创建新对象</li>
+<li>将this和调用参数传递给构造器，执行</li>
+<li>如果构造器返回的是对象，则返回，否则返回第一步创建的对象</li>
+</ul>
+
+<p>用代码来详细解释一下<code>let obj = new Base;</code>这句</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">// 1. 创建（或者说构造）一个全新的对象；
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">_obj</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="c1">// 2. 我们将这个空对象的__proto__成员指向了Base函数对象prototype成员对象
+</span><span class="c1"></span><span class="nx">_obj</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+
+<span class="c1">// 3. 我们将Base函数对象的this指针替换成_obj，然后再调用Base函数
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">_return</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">_obj</span><span class="p">);</span>
+
+<span class="c1">// 4 如果函数没有返回其他对象，那么new表达式中的函数调用会自动返回这个新对象
+</span><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">_return</span> <span class="o">===</span> <span class="s2">&#34;object&#34;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">obj</span> <span class="o">=</span> <span class="nx">_return</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="nx">obj</span> <span class="o">=</span> <span class="nx">_obj</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="es6中的类">ES6中的类</h2>
+
+<p>上面new运算和function搭配来实现类似class的行为对于很多人来说理解起来都很奇怪，也不利于阅读和整理代码。</p>
+
+<p>而在ES6中，任何时候我们都可以使用class关键字来定义类，而让function回归它原本的函数语义（而不是构造器）</p>
+
+<p>基本写法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">class</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">height</span><span class="p">,</span> <span class="nx">width</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">height</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">width</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="c1">// Getter
+</span><span class="c1"></span>  <span class="nx">get</span> <span class="nx">area</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">calcArea</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="c1">// Method
+</span><span class="c1"></span>  <span class="nx">calcArea</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">height</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>通过get/set关键字来创建getter，通过括号和大括号来创建方法，数据型成员最好写在构造器里面</p>
+
+<p>继承：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">class</span> <span class="nx">Animal</span> <span class="p">{</span> 
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+  <span class="p">}</span>
+  
+  <span class="nx">speak</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39; makes a noise.&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nx">Dog</span> <span class="k">extends</span> <span class="nx">Animal</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span> <span class="c1">// call the super class constructor and pass in the name parameter
+</span><span class="c1"></span>  <span class="p">}</span>
+
+  <span class="nx">speak</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39; barks.&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">let</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Dog</span><span class="p">(</span><span class="s1">&#39;Mitzie&#39;</span><span class="p">);</span>
+<span class="nx">d</span><span class="p">.</span><span class="nx">speak</span><span class="p">();</span> <span class="c1">// Mitzie barks.
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>上面通过extends关键字Dog继承了Animal，它会自动设置constructor，并且自动调用父类的构造函数，无需我们手动操作。</p>
+
+<h2 id="es6中使用class的注意点">ES6中使用class的注意点</h2>
+
+<ul>
+<li>class 先定义再使用，<strong>不存在变量提升</strong></li>
+<li><strong>不存在私有属性和方法</strong></li>
+
+<li><p>可以定义<strong>静态属性和方法</strong>，静态方法中的 this 指向 class 本身</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="kr">class</span> <span class="nx">Foo</span> <span class="p">{</span>
+<span class="kr">static</span> <span class="nx">bar() {</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">baz</span><span class="p">();</span> <span class="c1">// this === Foo
+</span><span class="c1"></span><span class="p">}</span>
+<span class="kr">static</span> <span class="nx">baz() {</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;hello&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">baz() {</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;world&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">Foo</span><span class="p">.</span><span class="nx">bar</span><span class="p">();</span> <span class="err">// hello</span></code></pre></td></tr></table>
+</div>
+</div></li>
+
+<li><p>实例属性可以不在<code>constructor</code>中定义，直接写在外面</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="kr">class</span> <span class="nx">ReactCounter</span> <span class="kr">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+<span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+<span class="nx">count</span>: <span class="kt">0</span>
+<span class="p">};</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div></li>
+
+<li><p><code>new.target</code>的使用技巧：<strong>感知当前类的继承情况</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="kr">class</span> <span class="nx">Shape</span> <span class="p">{</span>
+<span class="kr">constructor</span><span class="p">()</span> <span class="p">{</span>
+<span class="k">if</span> <span class="p">(</span><span class="k">new</span><span class="p">.</span><span class="nx">target</span> <span class="o">===</span> <span class="nx">Shape</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&#34;本类不能实例化&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">class</span> <span class="nx">Rectangle</span> <span class="kr">extends</span> <span class="nx">Shape</span> <span class="p">{</span>
+<span class="kr">constructor</span><span class="p">(</span><span class="nx">length</span><span class="p">,</span> <span class="nx">width</span><span class="p">)</span> <span class="p">{</span>
+<span class="kr">super</span><span class="p">();</span>
+<span class="c1">// ...
+</span><span class="c1"></span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Shape</span><span class="p">();</span> <span class="c1">// 报错
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Rectangle</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span> <span class="err">// 正确</span></code></pre></td></tr></table>
+</div>
+</div></li>
+
+<li><p>理解继承类中的<code>super</code>函数（这部分有三种情况）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="kr">class</span> <span class="nx">Parent</span> <span class="p">{</span>
+<span class="kr">static</span> <span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;static&#34;</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;instance&#34;</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">class</span> <span class="nx">Child</span> <span class="kr">extends</span> <span class="nx">Parent</span> <span class="p">{</span>
+<span class="kr">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+<span class="kr">super</span><span class="p">();</span> <span class="c1">// 1. super()===Parent.prototype.constructor.call(this)
+</span><span class="c1"></span><span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kr">static</span> <span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+<span class="kr">super</span><span class="p">.</span><span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span> <span class="c1">// 2. super===Parent
+</span><span class="c1"></span><span class="p">}</span>
+
+<span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+<span class="kr">super</span><span class="p">.</span><span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span> <span class="c1">// 3. super===Parent.prototype, 父类原型上的方法
+</span><span class="c1"></span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">Child</span><span class="p">.</span><span class="nx">myMethod</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// static 1
+</span><span class="c1"></span>
+<span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Child</span><span class="p">();</span>
+<span class="nx">child</span><span class="p">.</span><span class="nx">myMethod</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="err">// instance 2</span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+
+<h2 id="最后">最后</h2>
+
+<p>使用类的思想来设计代码时，也应该用class来声明类，而不是使用旧语法（使用function和new来模拟），这样会避免很多坑。</p>
+
+<p>从我们编码层面来看，class关键字和箭头运算符可以完全替代旧的function关键字，它更明确地区分了定义函数和定义类两种意图。</p>
+
+<p>参考自：</p>
+
+<blockquote>
+<p>重学前端 - Winter</p>
+
+<p>JavaScript高级程序设计</p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">billyhu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-12-09
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/javascript/">JavaScript</a>
+          <a href="/tags/object/">Object</a>
+          <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/">面向对象编程</a>
+          <a href="/tags/class/">class</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/js-object-characteristics-and-properties/">
+            <span class="next-text nav-default">JavaScript对象的特征和属性</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:billyhoom@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/billyhoomm" class="iconfont icon-github" title="github"></a>
+  <a href="https://billyhu.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">billyhu</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.9efee68f.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
