@@ -50,7 +50,7 @@
 
 <meta itemprop="datePublished" content="2019-12-09T10:46:01&#43;08:00" />
 <meta itemprop="dateModified" content="2019-12-09T10:46:01&#43;08:00" />
-<meta itemprop="wordCount" content="2037">
+<meta itemprop="wordCount" content="2040">
 
 
 
@@ -131,7 +131,7 @@
         <div class="post-category">
             <a href="/categories/javascript/"> JavaScript </a>
             </div>
-          <span class="more-meta"> 约 2037 字 </span>
+          <span class="more-meta"> 约 2040 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
       </div>
@@ -420,7 +420,7 @@
 <li><p>可以定义<strong>静态属性和方法</strong>，静态方法中的 this 指向 class 本身</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="lnt"> 1
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -433,46 +433,52 @@
 </span><span class="lnt">11
 </span><span class="lnt">12
 </span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="kr">class</span> <span class="nx">Foo</span> <span class="p">{</span>
-<span class="kr">static</span> <span class="nx">bar() {</span>
-<span class="k">this</span><span class="p">.</span><span class="nx">baz</span><span class="p">();</span> <span class="c1">// this === Foo
-</span><span class="c1"></span><span class="p">}</span>
-<span class="kr">static</span> <span class="nx">baz() {</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;hello&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="nx">baz() {</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;world&#34;</span><span class="p">);</span>
-<span class="p">}</span>
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">class</span> <span class="nx">Foo</span> <span class="p">{</span>
+  <span class="kr">static</span> <span class="nx">bar</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">baz</span><span class="p">();</span> <span class="c1">// this === Foo
+</span><span class="c1"></span>  <span class="p">}</span>
+
+  <span class="kr">static</span> <span class="nx">baz</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;hello&#34;</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">baz</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;world&#34;</span><span class="p">);</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="nx">Foo</span><span class="p">.</span><span class="nx">bar</span><span class="p">();</span> <span class="err">// hello</span></code></pre></td></tr></table>
+<span class="nx">Foo</span><span class="p">.</span><span class="nx">bar</span><span class="p">();</span> <span class="c1">// hello
+</span></code></pre></td></tr></table>
 </div>
 </div></li>
 
 <li><p>实例属性可以不在<code>constructor</code>中定义，直接写在外面</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="lnt">1
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="kr">class</span> <span class="nx">ReactCounter</span> <span class="kr">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
-<span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
-<span class="nx">count</span>: <span class="kt">0</span>
-<span class="p">};</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">class</span> <span class="nx">ReactCounter</span> <span class="k">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">count</span><span class="o">:</span> <span class="mi">0</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div></li>
 
 <li><p><code>new.target</code>的使用技巧：<strong>感知当前类的继承情况</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="lnt"> 1
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -491,30 +497,31 @@
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="kr">class</span> <span class="nx">Shape</span> <span class="p">{</span>
-<span class="kr">constructor</span><span class="p">()</span> <span class="p">{</span>
-<span class="k">if</span> <span class="p">(</span><span class="k">new</span><span class="p">.</span><span class="nx">target</span> <span class="o">===</span> <span class="nx">Shape</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&#34;本类不能实例化&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kr">class</span> <span class="nx">Rectangle</span> <span class="kr">extends</span> <span class="nx">Shape</span> <span class="p">{</span>
-<span class="kr">constructor</span><span class="p">(</span><span class="nx">length</span><span class="p">,</span> <span class="nx">width</span><span class="p">)</span> <span class="p">{</span>
-<span class="kr">super</span><span class="p">();</span>
-<span class="c1">// ...
-</span><span class="c1"></span><span class="p">}</span>
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">class</span> <span class="nx">Shape</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">new</span><span class="p">.</span><span class="nx">target</span> <span class="o">===</span> <span class="nx">Shape</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&#34;本类不能实例化&#34;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Shape</span><span class="p">();</span> <span class="c1">// 报错
-</span><span class="c1"></span><span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Rectangle</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span> <span class="err">// 正确</span></code></pre></td></tr></table>
+<span class="k">class</span> <span class="nx">Rectangle</span> <span class="k">extends</span> <span class="nx">Shape</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">length</span><span class="p">,</span> <span class="nx">width</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">();</span>
+    <span class="c1">// ...
+</span><span class="c1"></span>  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Shape</span><span class="p">();</span> <span class="c1">// 报错
+</span><span class="c1"></span><span class="kd">let</span> <span class="nx">y</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Rectangle</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span> <span class="c1">// 正确
+</span></code></pre></td></tr></table>
 </div>
 </div></li>
 
 <li><p>理解继承类中的<code>super</code>函数（这部分有三种情况）</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="lnt"> 1
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -542,36 +549,39 @@
 </span><span class="lnt">26
 </span><span class="lnt">27
 </span><span class="lnt">28
+</span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="kr">class</span> <span class="nx">Parent</span> <span class="p">{</span>
-<span class="kr">static</span> <span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;static&#34;</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">class</span> <span class="nx">Parent</span> <span class="p">{</span>
+  <span class="kr">static</span> <span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;static&#34;</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;instance&#34;</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;instance&#34;</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="p">}</span>
+<span class="k">class</span> <span class="nx">Child</span> <span class="k">extends</span> <span class="nx">Parent</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">();</span> <span class="c1">// 1. super()===Parent.prototype.constructor.call(this)
+</span><span class="c1"></span>    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+  <span class="p">}</span>
 
-<span class="kr">class</span> <span class="nx">Child</span> <span class="kr">extends</span> <span class="nx">Parent</span> <span class="p">{</span>
-<span class="kr">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-<span class="kr">super</span><span class="p">();</span> <span class="c1">// 1. super()===Parent.prototype.constructor.call(this)
-</span><span class="c1"></span><span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="kr">static</span> <span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-<span class="kr">super</span><span class="p">.</span><span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span> <span class="c1">// 2. super===Parent
-</span><span class="c1"></span><span class="p">}</span>
+  <span class="kr">static</span> <span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">.</span><span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span> <span class="c1">// 2. super===Parent
+</span><span class="c1"></span>  <span class="p">}</span>
 
-<span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-<span class="kr">super</span><span class="p">.</span><span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span> <span class="c1">// 3. super===Parent.prototype, 父类原型上的方法
-</span><span class="c1"></span><span class="p">}</span>
+  <span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">.</span><span class="nx">myMethod</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span> <span class="c1">// 3. super===Parent.prototype, 父类原型上的方法
+</span><span class="c1"></span>  <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="nx">Child</span><span class="p">.</span><span class="nx">myMethod</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// static 1
 </span><span class="c1"></span>
-<span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Child</span><span class="p">();</span>
-<span class="nx">child</span><span class="p">.</span><span class="nx">myMethod</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="err">// instance 2</span></code></pre></td></tr></table>
+<span class="kd">let</span> <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Child</span><span class="p">();</span>
+<span class="nx">child</span><span class="p">.</span><span class="nx">myMethod</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// instance 2
+</span></code></pre></td></tr></table>
 </div>
 </div></li>
 </ul>

@@ -162,86 +162,89 @@ d.speak(); // Mitzie barks.
 - **不存在私有属性和方法**
 - 可以定义**静态属性和方法**，静态方法中的 this 指向 class 本身
 
-```typescript
-class Foo {
-  static bar() {
-    this.baz(); // this === Foo
-  }
-  static baz() {
-    console.log("hello");
-  }
-  baz() {
-    console.log("world");
-  }
-}
+  ```javascript
+    class Foo {
+      static bar() {
+        this.baz(); // this === Foo
+      }
 
-Foo.bar(); // hello
-```
+      static baz() {
+        console.log("hello");
+      }
+
+      baz() {
+        console.log("world");
+      }
+    }
+
+    Foo.bar(); // hello
+  ```
 
 - 实例属性可以不在`constructor`中定义，直接写在外面
 
-```typescript
-class ReactCounter extends React.Component {
-  state = {
-    count: 0
-  };
-}
-```
+  ```javascript
+    class ReactCounter extends React.Component {
+      state = {
+        count: 0
+      };
+    }
+  ```
 
 - `new.target`的使用技巧：**感知当前类的继承情况**
 
-```typescript
-class Shape {
-  constructor() {
-    if (new.target === Shape) {
-      throw new Error("本类不能实例化");
+  ```javascript
+    class Shape {
+      constructor() {
+        if (new.target === Shape) {
+          throw new Error("本类不能实例化");
+        }
+      }
     }
-  }
-}
 
-class Rectangle extends Shape {
-  constructor(length, width) {
-    super();
-    // ...
-  }
-}
+    class Rectangle extends Shape {
+      constructor(length, width) {
+        super();
+        // ...
+      }
+    }
 
-var x = new Shape(); // 报错
-var y = new Rectangle(3, 4); // 正确
-```
+    let x = new Shape(); // 报错
+    let y = new Rectangle(3, 4); // 正确
+  ```
 
 - 理解继承类中的`super`函数（这部分有三种情况）
 
-```typescript
-class Parent {
-  static myMethod(msg) {
-    console.log("static", msg);
-  }
+  ```javascript
+    class Parent {
+      static myMethod(msg) {
+        console.log("static", msg);
+      }
 
-  myMethod(msg) {
-    console.log("instance", msg);
-  }
-}
+      myMethod(msg) {
+        console.log("instance", msg);
+      }
+    }
 
-class Child extends Parent {
-  constructor(name) {
-    super(); // 1. super()===Parent.prototype.constructor.call(this)
-    this.name = name;
-  }
-  static myMethod(msg) {
-    super.myMethod(msg); // 2. super===Parent
-  }
+    class Child extends Parent {
+      constructor(name) {
+        super(); // 1. super()===Parent.prototype.constructor.call(this)
+        this.name = name;
+      }
 
-  myMethod(msg) {
-    super.myMethod(msg); // 3. super===Parent.prototype, 父类原型上的方法
-  }
-}
+      static myMethod(msg) {
+        super.myMethod(msg); // 2. super===Parent
+      }
 
-Child.myMethod(1); // static 1
+      myMethod(msg) {
+        super.myMethod(msg); // 3. super===Parent.prototype, 父类原型上的方法
+      }
+    }
 
-var child = new Child();
-child.myMethod(2); // instance 2
-```
+    Child.myMethod(1); // static 1
+
+    let child = new Child();
+    child.myMethod(2); // instance 2
+  ```
 
 
 
