@@ -6,10 +6,19 @@
     <description>Recent content in Posts on billyhu&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 09 Dec 2019 10:46:01 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 02 Mar 2020 21:18:01 +0800</lastBuildDate>
     
 	<atom:link href="https://billyhu.com/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>JavaScript在浏览器中的Event Loop、Tasks和Microtasks</title>
+      <link>https://billyhu.com/post/js-event-loop/</link>
+      <pubDate>Mon, 02 Mar 2020 21:18:01 +0800</pubDate>
+      
+      <guid>https://billyhu.com/post/js-event-loop/</guid>
+      <description>看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制</description>
+    </item>
     
     <item>
       <title>JavaScript中描述对象的方式：基于类和基于原型</title>

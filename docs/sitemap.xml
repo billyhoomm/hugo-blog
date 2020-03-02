@@ -3,34 +3,62 @@
   
   <url>
     <loc>https://billyhu.com/</loc>
-    <lastmod>2019-12-09T10:46:01+08:00</lastmod>
+    <lastmod>2020-03-02T21:18:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://billyhu.com/categories/</loc>
-    <lastmod>2019-12-09T10:46:01+08:00</lastmod>
+    <lastmod>2020-03-02T21:18:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://billyhu.com/tags/class/</loc>
-    <lastmod>2019-12-09T10:46:01+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://billyhu.com/tags/javascript/</loc>
-    <lastmod>2019-12-09T10:46:01+08:00</lastmod>
+    <loc>https://billyhu.com/tags/event-loop/</loc>
+    <lastmod>2020-03-02T21:18:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://billyhu.com/categories/javascript/</loc>
+    <lastmod>2020-03-02T21:18:01+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://billyhu.com/tags/javascript/</loc>
+    <lastmod>2020-03-02T21:18:01+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://billyhu.com/post/js-event-loop/</loc>
+    <lastmod>2020-03-02T21:18:01+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://billyhu.com/post/</loc>
+    <lastmod>2020-03-02T21:18:01+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://billyhu.com/tags/</loc>
+    <lastmod>2020-03-02T21:18:01+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://billyhu.com/tags/class/</loc>
     <lastmod>2019-12-09T10:46:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -45,20 +73,6 @@
   
   <url>
     <loc>https://billyhu.com/tags/object/</loc>
-    <lastmod>2019-12-09T10:46:01+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://billyhu.com/post/</loc>
-    <lastmod>2019-12-09T10:46:01+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://billyhu.com/tags/</loc>
     <lastmod>2019-12-09T10:46:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -177,14 +191,14 @@
   </url>
   
   <url>
-    <loc>https://billyhu.com/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/</loc>
+    <loc>https://billyhu.com/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/</loc>
     <lastmod>2018-04-26T10:26:50+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://billyhu.com/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/</loc>
+    <loc>https://billyhu.com/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/</loc>
     <lastmod>2018-04-26T10:26:50+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

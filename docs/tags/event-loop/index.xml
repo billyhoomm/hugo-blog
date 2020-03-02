@@ -6,7 +6,7 @@
     <description>Recent content in Event Loop on billyhu&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 09 Dec 2019 10:46:01 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 02 Mar 2020 21:18:01 +0800</lastBuildDate>
     
 	<atom:link href="https://billyhu.com/tags/event-loop/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>JavaScript在浏览器中的Event Loop、Tasks和Microtasks</title>
       <link>https://billyhu.com/post/js-event-loop/</link>
-      <pubDate>Mon, 09 Dec 2019 10:46:01 +0800</pubDate>
+      <pubDate>Mon, 02 Mar 2020 21:18:01 +0800</pubDate>
       
       <guid>https://billyhu.com/post/js-event-loop/</guid>
       <description>看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制</description>
