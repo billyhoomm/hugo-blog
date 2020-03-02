@@ -21,15 +21,6 @@
     </item>
     
     <item>
-      <title>JavaScript在浏览器中的Event Loop、Tasks和Microtasks</title>
-      <link>https://billyhu.com/post/js-event-loop/</link>
-      <pubDate>Mon, 09 Dec 2019 10:46:01 +0800</pubDate>
-      
-      <guid>https://billyhu.com/post/js-event-loop/</guid>
-      <description>看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制</description>
-    </item>
-    
-    <item>
       <title>JavaScript对象的特征和属性</title>
       <link>https://billyhu.com/post/js-object-characteristics-and-properties/</link>
       <pubDate>Mon, 28 Oct 2019 23:22:01 +0800</pubDate>
