@@ -111,15 +111,6 @@
     </item>
     
     <item>
-      <title>JS依次执行多项异步任务</title>
-      <link>https://billyhu.com/post/js-perform-multiple-asynchronous-tasks-in-sequence/</link>
-      <pubDate>Fri, 19 May 2017 23:23:50 +0800</pubDate>
-      
-      <guid>https://billyhu.com/post/js-perform-multiple-asynchronous-tasks-in-sequence/</guid>
-      <description>1、JS依次执行多项异步任务 有时候，我们希望批量执行一组异步任务，但是不是并行，而是依次执行，这组任务是动态的，在一个数组里，当然我们可以用</description>
-    </item>
-    
-    <item>
       <title>基于Webpack的前端工程化</title>
       <link>https://billyhu.com/post/front-end-engineering-of-webpack/</link>
       <pubDate>Mon, 10 Apr 2017 11:23:50 +0800</pubDate>
