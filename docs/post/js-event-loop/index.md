@@ -5,7 +5,7 @@
 
 这张图可以帮助我们理解：
 
-![](/Users/hubin/Desktop/Sync/GIT/hugo-blog/static/images/js-in-chrome.png)
+![](https://cdn.billyhu.com/blogUploads/js-in-chrome.png)
 
 * JS 运行在单线程上，通过 event loop 完成异步调度
 * DOM、XMLHTTPREquest、setTimeout、setInterval 等是异步的 WebAPIs
@@ -15,7 +15,7 @@
 
 这里是视频中关于执行一个异步操作时的图示：
 
-![](/Users/hubin/Desktop/Sync/GIT/hugo-blog/static/images/js-run.png)
+![](https://cdn.billyhu.com/blogUploads/js-run.png)
 
 * 当浏览器开始执行我们的代码时，会将代码推入 Tasks 中
 * 当 stack 为空，则 event loop 从 task queue 中取出一个任务执行
@@ -57,7 +57,7 @@ console.log("script end");
 
 下图中需要重点理解 Tasks、Microtasks、JS stack 这三个栈
 
-![](/Users/hubin/Desktop/Sync/GIT/hugo-blog/static/images/tasks-microtasks.png)
+![](https://cdn.billyhu.com/blogUploads/tasks-microtasks.png)
 
 **第一次 Task 执行：**
 
@@ -99,7 +99,7 @@ console.log("script end");
 
 两个父子关系的 div 绑定 click 事件，根据回调输出 log。
 
-![](/Users/hubin/Desktop/Sync/GIT/hugo-blog/static/images/js-click.png)
+![](https://cdn.billyhu.com/blogUploads/js-click.png)
 
 ```html
 <div class="outer">
