@@ -17,7 +17,7 @@
       <pubDate>Mon, 02 Mar 2020 21:18:01 +0800</pubDate>
       
       <guid>https://billyhu.com/post/js-event-loop/</guid>
-      <description>看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制</description>
+      <description>看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制 这张图可以帮助我们理解： JS 运行在单线程上，通</description>
     </item>
     
     <item>

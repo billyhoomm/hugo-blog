@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="billyhu" /><meta name="description" content="看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
+<meta name="author" content="billyhu" /><meta name="description" content="看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制 这张图可以帮助我们理解： JS 运行在单线程上，通" /><meta name="keywords" content="博客, 技术博客, 文章, 技术文章, IT, 互联网, 前端, NodeJS" />
 
 
 
@@ -39,25 +39,25 @@
 
 
 <meta property="og:title" content="JavaScript在浏览器中的Event Loop、Tasks和Microtasks" />
-<meta property="og:description" content="看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制" />
+<meta property="og:description" content="看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制 这张图可以帮助我们理解： JS 运行在单线程上，通" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://billyhu.com/post/js-event-loop/" />
 <meta property="article:published_time" content="2020-03-02T21:18:01+08:00" />
 <meta property="article:modified_time" content="2020-03-02T21:18:01+08:00" />
 <meta itemprop="name" content="JavaScript在浏览器中的Event Loop、Tasks和Microtasks">
-<meta itemprop="description" content="看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制">
+<meta itemprop="description" content="看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制 这张图可以帮助我们理解： JS 运行在单线程上，通">
 
 
 <meta itemprop="datePublished" content="2020-03-02T21:18:01&#43;08:00" />
 <meta itemprop="dateModified" content="2020-03-02T21:18:01&#43;08:00" />
-<meta itemprop="wordCount" content="48">
+<meta itemprop="wordCount" content="1627">
 
 
 
 <meta itemprop="keywords" content="JavaScript,Event Loop," />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="JavaScript在浏览器中的Event Loop、Tasks和Microtasks"/>
-<meta name="twitter:description" content="看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制"/>
+<meta name="twitter:description" content="看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：地址 JS异步机制 这张图可以帮助我们理解： JS 运行在单线程上，通"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -131,8 +131,8 @@
         <div class="post-category">
             <a href="/categories/javascript/"> JavaScript </a>
             </div>
-          <span class="more-meta"> 约 48 字 </span>
-          <span class="more-meta"> 预计阅读 1 分钟 </span>
+          <span class="more-meta"> 约 1627 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
       </div>
     </header>
@@ -145,6 +145,18 @@
 <li>
 <ul>
 <li><a href="#js异步机制">JS异步机制</a></li>
+<li><a href="#tasks-microtasks-的区别">Tasks/microtasks 的区别</a>
+<ul>
+<li><a href="#代码解读-1">代码解读 1:</a>
+<ul>
+<li><a href="#tasks-和-microtasks-所涉及的-api">Tasks 和 microtasks 所涉及的 API：</a></li>
+<li><a href="#需要注意的地方">需要注意的地方：</a></li>
+</ul></li>
+<li><a href="#代码解读-2">代码解读 2</a>
+<ul>
+<li><a href="#需要注意的地方-1">需要注意的地方</a></li>
+</ul></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -156,6 +168,269 @@
 <p>看了JSConf上一个大神介绍Event Loop的视频讲得非常好，给它总结一下：<a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">地址</a></p>
 
 <h2 id="js异步机制">JS异步机制</h2>
+
+<p>这张图可以帮助我们理解：</p>
+
+<p><img src="/Users/hubin/Desktop/Sync/GIT/hugo-blog/static/images/js-in-chrome.png" alt="" /></p>
+
+<ul>
+<li>JS 运行在单线程上，通过 event loop 完成异步调度</li>
+<li>DOM、XMLHTTPREquest、setTimeout、setInterval 等是异步的 WebAPIs</li>
+<li>异步代码会被推入 callback queue（Tasks）中，当 stack 空闲时挨个推入 stack</li>
+</ul>
+
+<p>这里是视频中关于执行一个异步操作时的图示：</p>
+
+<p><img src="/Users/hubin/Desktop/Sync/GIT/hugo-blog/static/images/js-run.png" alt="" /></p>
+
+<ul>
+<li>当浏览器开始执行我们的代码时，会将代码推入 Tasks 中</li>
+<li>当 stack 为空，则 event loop 从 task queue 中取出一个任务执行</li>
+<li>运行代码打印<code>Hi</code></li>
+<li>遇到<code>setTimeout</code>时，将回调推入 webapis 管理（里面有一个定时队列）</li>
+<li>代码继续向下执行，输出<code>JSConfEU</code>，随后 stack 清空，<strong>UI 刷新</strong></li>
+<li>当定时时间到了，webapis 将回调推入 task queue 中，stack 此时为空，event loop 取一个任务推入 stack 执行</li>
+<li>代码输出<code>there</code></li>
+</ul>
+
+<p>以上就是 JS 的异步执行过程，<strong>Tasks</strong>就是上图中的 task queue，下面再看看<strong>microtasks</strong></p>
+
+<h2 id="tasks-microtasks-的区别">Tasks/microtasks 的区别</h2>
+
+<p>这里有一篇Google Chrome 的开发者对microtasks的详细介绍，<a href="https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/">地址</a>，可以抽时间读一下。</p>
+
+<h3 id="代码解读-1">代码解读 1:</h3>
+
+<p>当<code>setTimeout</code>和<code>Promise</code>同时存在时，代码示例及执行顺序说明如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;script start&#34;</span><span class="p">);</span>
+
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;setTimeout&#34;</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+
+<span class="nb">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;promise1&#34;</span><span class="p">);</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;promise2&#34;</span><span class="p">);</span>
+  <span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;script end&#34;</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>下图中需要重点理解 Tasks、Microtasks、JS stack 这三个栈</p>
+
+<p><img src="/Users/hubin/Desktop/Sync/GIT/hugo-blog/static/images/tasks-microtasks.png" alt="" /></p>
+
+<p><strong>第一次 Task 执行：</strong></p>
+
+<ul>
+<li>将当前的 script 推入 Tasks 中</li>
+<li>执行第一段代码，输出<code>script start</code></li>
+<li>setTimout 回调推入 webapis 的定时栈中</li>
+<li>Promise 的第一个 then 回调推入 Microtasks</li>
+<li>执行最后一句输出<code>script end</code></li>
+<li><strong>检查 Microtasks 中是否有任务</strong></li>
+<li>执行推入的第一个 Promise 的 then 回调</li>
+<li>输出<code>promise1</code>，之后将第二个 then 回调推入 Microtasks</li>
+<li>检查 Microtasks 中是否有任务</li>
+<li>执行推入的第二个 Promise 的 then 回调</li>
+<li>输出<code>promise2</code></li>
+<li>第一个 Tasks 执行完毕，<strong>刷新 UI</strong></li>
+</ul>
+
+<p><strong>第二次 Task 执行：</strong></p>
+
+<ul>
+<li>webapis 根据定时将 setTimeout 回调推入 Tasks 中</li>
+<li>Event loop 从 Tasks 取出任务执行</li>
+<li>输出<code>setTimeout</code></li>
+<li><strong>检查 Microtasks 中没有任务</strong></li>
+<li>当前 Task 执行完毕，<strong>刷新 UI</strong></li>
+</ul>
+
+<h4 id="tasks-和-microtasks-所涉及的-api">Tasks 和 microtasks 所涉及的 API：</h4>
+
+<ul>
+<li><strong>Tasks</strong>: setTimeout, setInterval, (setImmediate, I/O,) UI rendering</li>
+<li><strong>microtasks</strong>: (process.nextTick,) Promise, MutationObserver</li>
+</ul>
+
+<h4 id="需要注意的地方">需要注意的地方：</h4>
+
+<ul>
+<li>microtasks 不是 webapis，他的优先级比 Tasks 高，每轮主流任务执行完毕都会检查 microtasks，检查完毕后这轮 Task 才结束</li>
+<li>micrtasks 为 js 逻辑的一部分，不涉及到 UI 等 web 功能，因此功能上应该和 setTimeout 等 webapis 作区分</li>
+<li><strong>每轮 Task 结束都会渲染 UI，为了防止 UI 卡死</strong></li>
+<li>setTimeout 由 webapis 管理，当定时时间到了，就推入 Tasks 中等待执行（不是立即执行）</li>
+<li>setTimeout 最短执行时间为 4ms，即使定时时间为 0</li>
+</ul>
+
+<h3 id="代码解读-2">代码解读 2</h3>
+
+<p>两个父子关系的 div 绑定 click 事件，根据回调输出 log。</p>
+
+<p><img src="/Users/hubin/Desktop/Sync/GIT/hugo-blog/static/images/js-click.png" alt="" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-html" data-lang="html"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;outer&#34;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;inner&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// Let&#39;s get hold of those elements
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">outer</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&#34;.outer&#34;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">inner</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&#34;.inner&#34;</span><span class="p">);</span>
+
+<span class="c1">// Let&#39;s listen for attribute changes on the
+</span><span class="c1">// outer element
+</span><span class="c1"></span><span class="k">new</span> <span class="nx">MutationObserver</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;mutate&#34;</span><span class="p">);</span>
+<span class="p">}).</span><span class="nx">observe</span><span class="p">(</span><span class="nx">outer</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">attributes</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span>
+
+<span class="c1">// Here&#39;s a click listener…
+</span><span class="c1"></span><span class="kd">function</span> <span class="nx">onClick</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;click&#34;</span><span class="p">);</span>
+
+  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;timeout&#34;</span><span class="p">);</span>
+  <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+
+  <span class="nb">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;promise&#34;</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">outer</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&#34;data-random&#34;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="c1">// …which we&#39;ll attach to both elements
+</span><span class="c1"></span><span class="nx">inner</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&#34;click&#34;</span><span class="p">,</span> <span class="nx">onClick</span><span class="p">);</span>
+<span class="nx">outer</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&#34;click&#34;</span><span class="p">,</span> <span class="nx">onClick</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>点击内部 div 后的执行过程如下：</p>
+
+<p><strong>脚本执行：</strong></p>
+
+<ul>
+<li>将 script 推如 Tasks，因为 stack 空闲，执行 script 脚本，完成事件绑定</li>
+</ul>
+
+<p><strong>用户点击：</strong></p>
+
+<ul>
+<li>用户点击 inner div</li>
+<li>因为是在冒泡阶段触发，因此 inner 元素的 click 事件先触发，回调推入 Tasks 中</li>
+<li>冒泡向上，outer 元素的 click 事件触发，回调推入 Tasks 中</li>
+<li>当前没有 microtasks，Tasks 执行完毕，UI 更新</li>
+</ul>
+
+<p><strong>第一个事件回调（inner）：</strong></p>
+
+<ul>
+<li>从 Tasks 中取出任务（inner 元素的事件回调）</li>
+<li>打印<code>click</code>，</li>
+<li>setTimout 回调推入 webapis 的定时栈中</li>
+<li>将 Promise 的第一个 then 推入 microtasks 中</li>
+<li>修改 outer 的属性触发监听，将 MutationObserver 推入 microtasks</li>
+<li>检查 microtasks 中任务并执行</li>
+<li>打印 <code>promise</code>和<code>mutate</code></li>
+<li>第一个回调执行完毕，执行第二个 click 事件回调</li>
+</ul>
+
+<p><strong>第二个事件回调（outer）：</strong></p>
+
+<ul>
+<li>从 Tasks 中取出任务（outer 元素的事件回调）</li>
+<li>打印<code>click</code></li>
+<li>setTimout 回调推入 webapis 的定时栈中</li>
+<li>将 Promise 的第一个 then 推入 microtasks 中</li>
+<li>修改 outer 的属性触发监听，将 MutationObserver 推入 microtasks</li>
+<li>检查 microtasks 中任务并执行</li>
+<li>打印 <code>promise</code>和<code>mutate</code></li>
+<li>第二个回调执行完毕</li>
+</ul>
+
+<p><strong>setTimeout 回调：</strong></p>
+
+<ul>
+<li>上两个 Tasks 执行完毕，检查 webapis 是否有定时任务</li>
+<li>将 inner 中的 setTimeout 推入 Tasks</li>
+<li>执行回调输出<code>timeout</code></li>
+<li>检查 webapis 是否有定时任务</li>
+<li>将 outer 中的 setTimeout 推入 Tasks</li>
+<li>执行回调输出<code>timeout</code></li>
+</ul>
+
+<h4 id="需要注意的地方-1">需要注意的地方</h4>
+
+<ul>
+<li>注意冒泡过程添加 Tasks 的顺序</li>
+<li>Tasks 中的任务遵循先进先出的规则</li>
+<li>microtasks 中的任务在每次 Tasks 时都必须检查并执行完毕</li>
+</ul>
 
     </div>
 
