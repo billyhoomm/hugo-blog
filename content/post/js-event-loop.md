@@ -86,7 +86,7 @@ console.log("script end");
 - webapis 根据定时将 setTimeout 回调推入 Tasks 中
 - Event loop 从 Tasks 取出任务执行
 - 输出`setTimeout`
-- **检查 Microtasks 中没有任务**
+- 检查 Microtasks 中没有任务
 - 当前 Task 执行完毕，**刷新 UI**
 
 #### Tasks 和 microtasks 所涉及的 API：
